@@ -30,6 +30,17 @@ namespace WebApi
         {
             services.AddControllers();
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("cors",
+                    builder =>
+                    {
+                        builder.AllowAnyOrigin()
+                                .AllowAnyHeader()
+                                .AllowAnyMethod();
+                    });
+            });
+
             var key = Encoding.ASCII.GetBytes(Configuration.GetSection("Secret").Value);
             services.AddAuthentication(x =>
             {
@@ -88,6 +99,8 @@ namespace WebApi
             }
 
             app.UseRouting();
+
+            app.UseCors("cors");
 
             app.UseAuthentication();
             app.UseAuthorization();

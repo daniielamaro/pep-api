@@ -49,7 +49,8 @@ namespace WebApi.Controllers
                     Email = request.Email,
                     DataNasc = DateTime.Parse(request.DataNasc),
                     Endereco = request.Endereco,
-                    Senha = request.Senha
+                    Senha = request.Senha,
+                    DataCriacao = DateTime.Now
                 };
 
                 var pacienteApp = new PacienteApp();
@@ -78,7 +79,8 @@ namespace WebApi.Controllers
                     new Arquivo {
                         Nome = request.Foto.Nome,
                         Tipo = request.Foto.Tipo,
-                        Binario = request.Foto.Binario
+                        Binario = request.Foto.Binario,
+                        DataCriacao = DateTime.Now
                     }
                 );
 
@@ -88,14 +90,6 @@ namespace WebApi.Controllers
             {
                 return BadRequest(e.Message);
             }
-
-        }
-
-        [HttpPost("Teste")]
-        [AllowAnonymous]
-        public async Task<IActionResult> Teste()
-        {
-            return Ok("Deu certo!");
 
         }
     }

@@ -50,9 +50,25 @@ namespace Aplicacao
             if (paciente == null)
                 throw new Exception("Usuario não encontrado!");
 
-            paciente.FotoPerfil = Foto;
+            if(paciente.FotoPerfil == null)
+            {
+                paciente.FotoPerfil = Foto;
+                context.Pacientes.Update(paciente);
+            }
+            else
+            {
+                var foto = await context.Arquivos.Where(x => x.Id == paciente.FotoPerfil.Id).FirstOrDefaultAsync();
 
-            context.Pacientes.Update(paciente);
+                foto.Nome = Foto.Nome;
+                foto.Tipo = Foto.Tipo;
+                foto.Binario = Foto.Binario;
+                foto.DataAtualizacao = DateTime.Now;
+
+                paciente.FotoPerfil = foto;
+
+                context.Arquivos.Update(foto);
+            }
+            
             await context.SaveChangesAsync();
 
             return paciente;
