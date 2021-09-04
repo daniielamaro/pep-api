@@ -8,6 +8,7 @@ namespace Dominio.Entities
     {
         public Arquivo Resultado { get; set; }
         public ExameTipo Tipo { get; set; }
+        public bool Publico { get; set; }
         public string Observacoes { get; set; }
     }
 }

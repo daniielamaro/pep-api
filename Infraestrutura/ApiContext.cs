@@ -16,7 +16,7 @@ namespace Infraestrutura
         public DbSet<Consulta> Consultas { get; set; }
         public DbSet<ConsultaTipo> TiposConsultas { get; set; }
 
-        private readonly string ConectionString = "Server=;Port=;Database=;User Id=;Password=;";
+        private readonly string ConectionString = "Server=35.184.198.60;Port=5432;Database=postgres;User Id=unisuam;Password=@Unisuam1234;";
 
         public ApiContext(DbContextOptions<ApiContext> options) : base(options) { }
         public ApiContext() { }

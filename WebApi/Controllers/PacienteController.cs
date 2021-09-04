@@ -46,6 +46,7 @@ namespace WebApi.Controllers
                     Nome = request.Nome,
                     Cpf = request.CPF,
                     Rg = request.RG,
+                    Email = request.Email,
                     DataNasc = DateTime.Parse(request.DataNasc),
                     Endereco = request.Endereco,
                     Senha = request.Senha
@@ -87,6 +88,14 @@ namespace WebApi.Controllers
             {
                 return BadRequest(e.Message);
             }
+
+        }
+
+        [HttpPost("Teste")]
+        [AllowAnonymous]
+        public async Task<IActionResult> Teste()
+        {
+            return Ok("Deu certo!");
 
         }
     }
