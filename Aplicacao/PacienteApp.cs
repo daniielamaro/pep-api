@@ -73,5 +73,24 @@ namespace Aplicacao
 
             return paciente;
         }
+
+        public async Task DeletarFotoPerfil(Guid Id)
+        {
+            using var context = new ApiContext();
+
+            var paciente = await context.Pacientes.Include(x => x.FotoPerfil).Where(x => x.Id == Id).FirstOrDefaultAsync();
+
+            if (paciente == null)
+                throw new Exception("Usuario não encontrado!");
+
+            if (paciente.FotoPerfil != null)
+            {
+                var foto = await context.Arquivos.Where(x => x.Id == paciente.FotoPerfil.Id).FirstOrDefaultAsync();
+
+                context.Arquivos.Remove(foto);
+            }
+
+            await context.SaveChangesAsync();
+        }
     }
 }
