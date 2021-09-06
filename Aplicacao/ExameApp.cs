@@ -2,6 +2,7 @@
 using Infraestrutura;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -29,6 +30,23 @@ namespace Aplicacao
             context.Pacientes.Update(paciente);
 
             await context.SaveChangesAsync();
+        }
+
+        public async Task<List<Exame>> ConsultarListaExame(Guid id)
+        {
+            using var context = new ApiContext();
+
+            var paciente = await context.Pacientes.AsNoTracking()
+                .Include(x => x.Exames)
+                    .ThenInclude(e => e.Tipo)
+                .Where(x => x.Id == id).FirstOrDefaultAsync();
+
+            if (paciente == null)
+                throw new Exception("Paciente não encontrado!");
+
+            var exames = paciente.Exames;
+
+            return exames;
         }
     }
 }
