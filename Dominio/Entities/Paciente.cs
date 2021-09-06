@@ -15,6 +15,7 @@ namespace Dominio.Entities
         public string Endereco { get; set; }
         public string Senha { get; set; }
         public List<Exame> Exames { get; set; }
+   
         public List<Consulta> Consultas { get; set; }
     }
 }
