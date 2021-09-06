@@ -18,17 +18,13 @@ namespace WebApi.Controllers
         {
             try
             {
-                
-
                 var newExame = new Exame
                 {
-                   
                     Resultado = new Arquivo
                     {
                         Nome = exame.Arquvio.Nome,
                         Tipo = exame.Arquvio.Tipo,
                         Binario = exame.Arquvio.Binario
-
                     },
                     Observacoes = exame.Observacoes,
                     Publico = exame.Publico,
@@ -39,11 +35,9 @@ namespace WebApi.Controllers
                 await ExameApp.CadastrarExame(newExame, exame.IdPaciente, exame.IdTipoExame);
 
                 return Ok();
-
             }
             catch (Exception e)
             {
-
                 return BadRequest(e.Message);
             }
         }
