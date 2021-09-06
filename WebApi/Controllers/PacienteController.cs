@@ -90,7 +90,24 @@ namespace WebApi.Controllers
             {
                 return BadRequest(e.Message);
             }
+        }
 
+        [HttpPost("DeletarFotoPerfil")]
+        [Authorize]
+        public async Task<IActionResult> DeletarFotoPerfil(Guid id)
+        {
+            try
+            {
+                var pacienteApp = new PacienteApp();
+
+                await pacienteApp.DeletarFotoPerfil(id);
+
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
     }
 }
