@@ -57,5 +57,21 @@ namespace WebApi.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        [HttpPost("ConsultarListaTiposExame")]
+        [Authorize]
+        public async Task<IActionResult> ConsultarListaTiposExame()
+        {
+            try
+            {
+                var ExameApp = new ExameApp();
+
+                return Ok(await ExameApp.ConsultarListaTiposExame());
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }

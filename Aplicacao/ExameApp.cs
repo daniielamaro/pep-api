@@ -48,5 +48,12 @@ namespace Aplicacao
 
             return exames;
         }
+
+        public async Task<List<ExameTipo>> ConsultarListaTiposExame()
+        {
+            using var context = new ApiContext();
+
+            return await context.TiposExames.AsNoTracking().ToListAsync();
+        }
     }
 }
