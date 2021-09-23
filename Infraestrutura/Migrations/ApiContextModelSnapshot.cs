@@ -47,6 +47,85 @@ namespace Infraestrutura.Migrations
                     b.ToTable("Arquivos");
                 });
 
+            modelBuilder.Entity("Dominio.Entities.Clinica", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("DataAtualizacao")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("DataCriacao")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Endereco")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("NomeClinica")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Clinicas");
+                });
+
+            modelBuilder.Entity("Dominio.Entities.ClinicaConsultaTipo", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("ClinicasId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("ConsultaTipoId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("DataAtualizacao")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("DataCriacao")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClinicasId");
+
+                    b.HasIndex("ConsultaTipoId");
+
+                    b.ToTable("ClinicaConsultaTipos");
+                });
+
+            modelBuilder.Entity("Dominio.Entities.ClinicaTipoExames", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("ClinicaId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("DataAtualizacao")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("DataCriacao")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<Guid?>("ExameTipoId")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClinicaId");
+
+                    b.HasIndex("ExameTipoId");
+
+                    b.ToTable("ClinicaExameTipos");
+                });
+
             modelBuilder.Entity("Dominio.Entities.Consulta", b =>
                 {
                     b.Property<Guid>("Id")
@@ -215,6 +294,28 @@ namespace Infraestrutura.Migrations
                     b.HasIndex("FotoPerfilId");
 
                     b.ToTable("Pacientes");
+                });
+
+            modelBuilder.Entity("Dominio.Entities.ClinicaConsultaTipo", b =>
+                {
+                    b.HasOne("Dominio.Entities.Clinica", "Clinicas")
+                        .WithMany("ConsultaTipos")
+                        .HasForeignKey("ClinicasId");
+
+                    b.HasOne("Dominio.Entities.ConsultaTipo", "ConsultaTipo")
+                        .WithMany("Clinicas")
+                        .HasForeignKey("ConsultaTipoId");
+                });
+
+            modelBuilder.Entity("Dominio.Entities.ClinicaTipoExames", b =>
+                {
+                    b.HasOne("Dominio.Entities.Clinica", "Clinica")
+                        .WithMany("ExameTipos")
+                        .HasForeignKey("ClinicaId");
+
+                    b.HasOne("Dominio.Entities.ExameTipo", "ExameTipo")
+                        .WithMany("Clinicas")
+                        .HasForeignKey("ExameTipoId");
                 });
 
             modelBuilder.Entity("Dominio.Entities.Consulta", b =>

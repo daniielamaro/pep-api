@@ -12,9 +12,12 @@ namespace Infraestrutura
         public DbSet<Paciente> Pacientes { get; set; }
         public DbSet<Arquivo> Arquivos { get; set; }
         public DbSet<Exame> Exames { get; set; }
+        public DbSet<Clinica> Clinicas { get; set; }
         public DbSet<ExameTipo> TiposExames { get; set; }
         public DbSet<Consulta> Consultas { get; set; }
         public DbSet<ConsultaTipo> TiposConsultas { get; set; }
+        public DbSet<ClinicaConsultaTipo> ClinicaConsultaTipos { get; set; }
+        public DbSet<ClinicaTipoExames> ClinicaExameTipos { get; set; }
 
         private readonly string ConectionString = "Server=35.184.198.60;Port=5432;Database=postgres;User Id=unisuam;Password=@Unisuam1234;";
 
@@ -32,6 +35,9 @@ namespace Infraestrutura
             modelBuilder.ApplyConfiguration(new ExameTipoConfiguration());
             modelBuilder.ApplyConfiguration(new ConsultaConfiguration());
             modelBuilder.ApplyConfiguration(new ConsultaTipoConfiguration());
+            modelBuilder.ApplyConfiguration(new ClinicaConfiguration());
+
+
 
             base.OnModelCreating(modelBuilder);
         }
