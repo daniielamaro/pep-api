@@ -8,7 +8,6 @@ namespace Dominio.Entities
     {
         public string Nome { get; set; }
         public string Descricao { get; set; }
-        public List<ClinicaTipoExames> Clinicas { get; set; }
-    
+        public List<ClinicaTipoExames> ClinicasExame { get; set; }
     }
 }

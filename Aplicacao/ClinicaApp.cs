@@ -36,45 +36,28 @@ namespace Aplicacao
         }
 
 
-        public async Task<object> ListarClinicas(Guid id)
+        public async Task<object> GetClinica(Guid id)
         {
             using var context = new ApiContext();
 
-            /* var tipoConsulta = await context.ClinicaConsultaTipos.AsNoTracking()
-                                .Include(x =>x.Clinicas)
-                                .Where(x => x.Clinicas.Id == id).ToListAsync();
-
-             var tipoExame = await context.ClinicaExameTipos.AsNoTracking()
-                                 .Include(c => c.Clinica)
-                                 .Where(c => c.Clinica.Id == id).ToListAsync();
-
-             var clinicas = await context.Clinicas.AsNoTracking()
-                 .Where(x => x.Id == id).FirstOrDefaultAsync();*/
-
-
-            var clinica = await context.ClinicaConsultaTipos.AsNoTracking()
-                            .Include(x => x.Clinicas)
-                                .ThenInclude(x => x.ExameTipos)
-                             .Where(c => c.Clinicas.Id == id)
-                            .ToListAsync();
+            var clinica = await context.Clinicas.AsNoTracking()
+                                .Include(x => x.ConsultaTipos)
+                                    .ThenInclude(x => x.ConsultaTipo)
+                                .Include(x => x.ExameTipos)
+                                    .ThenInclude(x => x.ExameTipo)
+                                .Where(c => c.Id == id)
+                                .FirstOrDefaultAsync();
 
             if (clinica == null)
-                throw new Exception("Clinica não encontrado!");
+                throw new Exception("Clinica não encontrada!");
 
-            //clinicas.ExameTipos = tipoExame;
-            //clinicas.ConsultaTipos = tipoConsulta;
-
-
-            var consulta = clinica;
-
-            
-            
-
-            
-
-            return consulta;
-
+            return new
+            {
+                clinica.NomeClinica,
+                clinica.Endereco,
+                TiposConsulta = clinica.ConsultaTipos.Select(x => x.ConsultaTipo).Select(x => new { x.Nome, x.Descricao } ).ToList(),
+                TiposExame = clinica.ExameTipos.Select(x => x.ExameTipo).Select(x => new { x.Nome, x.Descricao }).ToList()
+            };
         }
-
     }
 }

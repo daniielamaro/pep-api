@@ -36,17 +36,17 @@ namespace WebApi.Controllers
             }
         }
 
-        [HttpPost("ListaClinicas")]
+        [HttpPost("GetClinica")]
         //[Authorize]
-        public async Task<IActionResult> ConsultarLista(Guid id)
+        public async Task<IActionResult> GetClinica()
         {
             try
             {
                 var clinicaApp = new ClinicaApp();
 
-                return Ok(await clinicaApp.ListarClinicas(id));
+                var teste = await clinicaApp.GetClinica(new Guid("3fa85f64-5717-4562-b3fc-2c963f66afa6"));
 
-
+                return Ok(teste);
             }
             catch (Exception e)
             {

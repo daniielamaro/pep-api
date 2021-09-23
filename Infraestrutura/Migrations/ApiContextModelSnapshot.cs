@@ -74,38 +74,25 @@ namespace Infraestrutura.Migrations
 
             modelBuilder.Entity("Dominio.Entities.ClinicaConsultaTipo", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<Guid>("ConsultaId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("ClinicasId")
+                    b.Property<Guid>("ClinicaId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("ConsultaTipoId")
-                        .HasColumnType("uuid");
+                    b.HasKey("ConsultaId", "ClinicaId");
 
-                    b.Property<DateTime?>("DataAtualizacao")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<DateTime>("DataCriacao")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ClinicasId");
-
-                    b.HasIndex("ConsultaTipoId");
+                    b.HasIndex("ClinicaId");
 
                     b.ToTable("ClinicaConsultaTipos");
                 });
 
             modelBuilder.Entity("Dominio.Entities.ClinicaTipoExames", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<Guid>("ExameId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("ClinicaId")
+                    b.Property<Guid>("ClinicaId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime?>("DataAtualizacao")
@@ -114,14 +101,12 @@ namespace Infraestrutura.Migrations
                     b.Property<DateTime>("DataCriacao")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid?>("ExameTipoId")
+                    b.Property<Guid>("Id")
                         .HasColumnType("uuid");
 
-                    b.HasKey("Id");
+                    b.HasKey("ExameId", "ClinicaId");
 
                     b.HasIndex("ClinicaId");
-
-                    b.HasIndex("ExameTipoId");
 
                     b.ToTable("ClinicaExameTipos");
                 });
@@ -298,24 +283,32 @@ namespace Infraestrutura.Migrations
 
             modelBuilder.Entity("Dominio.Entities.ClinicaConsultaTipo", b =>
                 {
-                    b.HasOne("Dominio.Entities.Clinica", "Clinicas")
+                    b.HasOne("Dominio.Entities.Clinica", "Clinica")
                         .WithMany("ConsultaTipos")
-                        .HasForeignKey("ClinicasId");
+                        .HasForeignKey("ClinicaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Dominio.Entities.ConsultaTipo", "ConsultaTipo")
-                        .WithMany("Clinicas")
-                        .HasForeignKey("ConsultaTipoId");
+                        .WithMany("ClinicasConsulta")
+                        .HasForeignKey("ConsultaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Dominio.Entities.ClinicaTipoExames", b =>
                 {
                     b.HasOne("Dominio.Entities.Clinica", "Clinica")
                         .WithMany("ExameTipos")
-                        .HasForeignKey("ClinicaId");
+                        .HasForeignKey("ClinicaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Dominio.Entities.ExameTipo", "ExameTipo")
-                        .WithMany("Clinicas")
-                        .HasForeignKey("ExameTipoId");
+                        .WithMany("ClinicasExame")
+                        .HasForeignKey("ExameId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Dominio.Entities.Consulta", b =>

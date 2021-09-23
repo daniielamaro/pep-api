@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Infraestrutura.Migrations
 {
-    public partial class Inicial : Migration
+    public partial class inicial : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -99,82 +99,51 @@ namespace Infraestrutura.Migrations
                 name: "ClinicaConsultaTipos",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(nullable: false),
-                    DataCriacao = table.Column<DateTime>(nullable: false),
-                    DataAtualizacao = table.Column<DateTime>(nullable: true),
-                    ConsultaTipoId1 = table.Column<Guid>(nullable: true),
-                    ClinicasId = table.Column<Guid>(nullable: true),
-                    ClinicaId = table.Column<Guid>(nullable: true),
-                    ConsultaTipoId = table.Column<Guid>(nullable: true)
+                    ConsultaId = table.Column<Guid>(nullable: false),
+                    ClinicaId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ClinicaConsultaTipos", x => x.Id);
+                    table.PrimaryKey("PK_ClinicaConsultaTipos", x => new { x.ConsultaId, x.ClinicaId });
                     table.ForeignKey(
                         name: "FK_ClinicaConsultaTipos_Clinicas_ClinicaId",
                         column: x => x.ClinicaId,
                         principalTable: "Clinicas",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ClinicaConsultaTipos_Clinicas_ClinicasId",
-                        column: x => x.ClinicasId,
-                        principalTable: "Clinicas",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ClinicaConsultaTipos_TiposConsultas_ConsultaTipoId",
-                        column: x => x.ConsultaTipoId,
+                        name: "FK_ClinicaConsultaTipos_TiposConsultas_ConsultaId",
+                        column: x => x.ConsultaId,
                         principalTable: "TiposConsultas",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
-                    table.ForeignKey(
-                        name: "FK_ClinicaConsultaTipos_TiposConsultas_ConsultaTipoId1",
-                        column: x => x.ConsultaTipoId1,
-                        principalTable: "TiposConsultas",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
                 name: "ClinicaExameTipos",
                 columns: table => new
                 {
+                    ExameId = table.Column<Guid>(nullable: false),
+                    ClinicaId = table.Column<Guid>(nullable: false),
                     Id = table.Column<Guid>(nullable: false),
                     DataCriacao = table.Column<DateTime>(nullable: false),
-                    DataAtualizacao = table.Column<DateTime>(nullable: true),
-                    ExameTipoId1 = table.Column<Guid>(nullable: true),
-                    ClinicaId1 = table.Column<Guid>(nullable: true),
-                    ClinicaId = table.Column<Guid>(nullable: true),
-                    ExameTipoId = table.Column<Guid>(nullable: true)
+                    DataAtualizacao = table.Column<DateTime>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ClinicaExameTipos", x => x.Id);
+                    table.PrimaryKey("PK_ClinicaExameTipos", x => new { x.ExameId, x.ClinicaId });
                     table.ForeignKey(
                         name: "FK_ClinicaExameTipos_Clinicas_ClinicaId",
                         column: x => x.ClinicaId,
                         principalTable: "Clinicas",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ClinicaExameTipos_Clinicas_ClinicaId1",
-                        column: x => x.ClinicaId1,
-                        principalTable: "Clinicas",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_ClinicaExameTipos_TiposExames_ExameTipoId",
-                        column: x => x.ExameTipoId,
+                        name: "FK_ClinicaExameTipos_TiposExames_ExameId",
+                        column: x => x.ExameId,
                         principalTable: "TiposExames",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.SetNull);
-                    table.ForeignKey(
-                        name: "FK_ClinicaExameTipos_TiposExames_ExameTipoId1",
-                        column: x => x.ExameTipoId1,
-                        principalTable: "TiposExames",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -249,39 +218,9 @@ namespace Infraestrutura.Migrations
                 column: "ClinicaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ClinicaConsultaTipos_ClinicasId",
-                table: "ClinicaConsultaTipos",
-                column: "ClinicasId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ClinicaConsultaTipos_ConsultaTipoId",
-                table: "ClinicaConsultaTipos",
-                column: "ConsultaTipoId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ClinicaConsultaTipos_ConsultaTipoId1",
-                table: "ClinicaConsultaTipos",
-                column: "ConsultaTipoId1");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ClinicaExameTipos_ClinicaId",
                 table: "ClinicaExameTipos",
                 column: "ClinicaId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ClinicaExameTipos_ClinicaId1",
-                table: "ClinicaExameTipos",
-                column: "ClinicaId1");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ClinicaExameTipos_ExameTipoId",
-                table: "ClinicaExameTipos",
-                column: "ExameTipoId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ClinicaExameTipos_ExameTipoId1",
-                table: "ClinicaExameTipos",
-                column: "ExameTipoId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Consultas_PacienteId",

@@ -37,7 +37,8 @@ namespace Infraestrutura
             modelBuilder.ApplyConfiguration(new ConsultaTipoConfiguration());
             modelBuilder.ApplyConfiguration(new ClinicaConfiguration());
 
-
+            modelBuilder.ApplyConfiguration(new ClinicaTipoExameConfiguration());
+            modelBuilder.ApplyConfiguration(new ClinicaTipoConsultaConfiguration());
 
             base.OnModelCreating(modelBuilder);
         }
