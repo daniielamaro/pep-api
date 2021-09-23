@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infraestrutura.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    [Migration("20210906185221_dia-realizacao-exame")]
-    partial class diarealizacaoexame
+    [Migration("20210923162632_Inicial")]
+    partial class Inicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -47,6 +47,105 @@ namespace Infraestrutura.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Arquivos");
+                });
+
+            modelBuilder.Entity("Dominio.Entities.Clinica", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("DataAtualizacao")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("DataCriacao")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("Endereco")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<string>("NomeClinica")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Clinicas");
+                });
+
+            modelBuilder.Entity("Dominio.Entities.ClinicaConsultaTipo", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("ClinicaId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("ClinicasId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("ConsultaTipoId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("ConsultaTipoId1")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("DataAtualizacao")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("DataCriacao")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClinicaId");
+
+                    b.HasIndex("ClinicasId");
+
+                    b.HasIndex("ConsultaTipoId");
+
+                    b.HasIndex("ConsultaTipoId1");
+
+                    b.ToTable("ClinicaConsultaTipos");
+                });
+
+            modelBuilder.Entity("Dominio.Entities.ClinicaTipoExames", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("ClinicaId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("ClinicaId1")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime?>("DataAtualizacao")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("DataCriacao")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<Guid?>("ExameTipoId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid?>("ExameTipoId1")
+                        .HasColumnType("uuid");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ClinicaId");
+
+                    b.HasIndex("ClinicaId1");
+
+                    b.HasIndex("ExameTipoId");
+
+                    b.HasIndex("ExameTipoId1");
+
+                    b.ToTable("ClinicaExameTipos");
                 });
 
             modelBuilder.Entity("Dominio.Entities.Consulta", b =>
@@ -217,6 +316,48 @@ namespace Infraestrutura.Migrations
                     b.HasIndex("FotoPerfilId");
 
                     b.ToTable("Pacientes");
+                });
+
+            modelBuilder.Entity("Dominio.Entities.ClinicaConsultaTipo", b =>
+                {
+                    b.HasOne("Dominio.Entities.Clinica", null)
+                        .WithMany("ConsultaTipos")
+                        .HasForeignKey("ClinicaId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Dominio.Entities.Clinica", "Clinicas")
+                        .WithMany()
+                        .HasForeignKey("ClinicasId");
+
+                    b.HasOne("Dominio.Entities.ConsultaTipo", null)
+                        .WithMany("Clinicas")
+                        .HasForeignKey("ConsultaTipoId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Dominio.Entities.ConsultaTipo", "ConsultaTipo")
+                        .WithMany()
+                        .HasForeignKey("ConsultaTipoId1");
+                });
+
+            modelBuilder.Entity("Dominio.Entities.ClinicaTipoExames", b =>
+                {
+                    b.HasOne("Dominio.Entities.Clinica", null)
+                        .WithMany("ExameTipos")
+                        .HasForeignKey("ClinicaId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Dominio.Entities.Clinica", "Clinica")
+                        .WithMany()
+                        .HasForeignKey("ClinicaId1");
+
+                    b.HasOne("Dominio.Entities.ExameTipo", null)
+                        .WithMany("Clinicas")
+                        .HasForeignKey("ExameTipoId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Dominio.Entities.ExameTipo", "ExameTipo")
+                        .WithMany()
+                        .HasForeignKey("ExameTipoId1");
                 });
 
             modelBuilder.Entity("Dominio.Entities.Consulta", b =>

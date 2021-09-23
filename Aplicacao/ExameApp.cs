@@ -49,6 +49,16 @@ namespace Aplicacao
             return exames;
         }
 
+        public async Task<object> ConsultarExameById(Guid Id)
+        {
+            using var context = new ApiContext();
+
+            var ConsultaId = await context.Exames.AsNoTracking().Include(x => x.Tipo).Where(x => x.Id == Id).SingleOrDefaultAsync();
+              
+            return ConsultaId;
+
+        }
+
         public async Task<List<ExameTipo>> ConsultarListaTiposExame()
         {
             using var context = new ApiContext();
