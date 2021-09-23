@@ -44,7 +44,7 @@ namespace Aplicacao
             if (paciente == null)
                 throw new Exception("Paciente não encontrado!");
 
-            var exames = paciente.Exames;
+            var exames = paciente.Exames.OrderByDescending(x => x.DiaRealizacao).ToList();
 
             return exames;
         }
@@ -53,7 +53,7 @@ namespace Aplicacao
         {
             using var context = new ApiContext();
 
-            return await context.TiposExames.AsNoTracking().ToListAsync();
+            return await context.TiposExames.AsNoTracking().OrderBy(x => x.Nome).ToListAsync();
         }
     }
 }
