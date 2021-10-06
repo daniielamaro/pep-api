@@ -11,27 +11,27 @@ namespace Aplicacao
 {
     public class ConsultaApp
     {
-        public async Task CadastroConsulta( Consulta consultas, Guid Id, Guid TipoId )
+        public async Task CadastroConsulta( Consulta consultas, Guid idPaciente, Guid idTipoConsulta)
         {
             using var context = new ApiContext();
 
-            var Pacientes = await context.Pacientes.Include(x => x.Consultas).Where(x => x.Id == Id).FirstOrDefaultAsync();
+            var paciente = await context.Pacientes.Include(x => x.Consultas).Where(x => x.Id == idPaciente).FirstOrDefaultAsync();
 
-            var TipoConsultas = await context.TiposConsultas.Where(x => x.Id == TipoId).FirstOrDefaultAsync();
+            var tipoConsulta = await context.TiposConsultas.Where(x => x.Id == idTipoConsulta).FirstOrDefaultAsync();
 
-            if(Pacientes == null)
-            
+            if(paciente == null)
                 throw new Exception("Usuario não encontrado");
+            else if (tipoConsulta == null)
+                throw new Exception("Tipo de Consulta não encontrado");
 
-            else if (TipoConsultas == null)
+            consultas.Tipo = tipoConsulta;
 
-                    throw new Exception("Tipo de Consulta não encontrado");
+            if (paciente.Consultas == null)
+                paciente.Consultas = new List<Consulta>();
 
-            consultas.Tipo = TipoConsultas;
+            paciente.Consultas.Add(consultas);
 
-            Pacientes.Consultas.Add(consultas);
-
-            context.Pacientes.Update(Pacientes);
+            context.Pacientes.Update(paciente);
 
             await context.SaveChangesAsync();
         }
@@ -49,19 +49,19 @@ namespace Aplicacao
              if (paciente == null)
                 throw new Exception("Paciente não encontrado!");
 
-            var consulta = paciente.Consultas;
-
-            return consulta;
+            return paciente.Consultas;
         }
 
-        public async Task<object> ConsultaById(Guid Id)
+        public async Task<object> GetConsultaById(Guid Id)
         {
             using var context = new ApiContext();
 
-            var ConsultaId = await context.Consultas.AsNoTracking().Include(x => x.Tipo).Where(x => x.Id == Id).SingleOrDefaultAsync();
+            var consulta = await context.Consultas.AsNoTracking().Include(x => x.Tipo).Where(x => x.Id == Id).FirstOrDefaultAsync();
 
-            return ConsultaId;
+            if (consulta == null)
+                throw new Exception("Consulta não encontrada!");
 
+            return consulta;
         }
 
         public async Task<List<ConsultaTipo>> ListaTiposConsulta()
