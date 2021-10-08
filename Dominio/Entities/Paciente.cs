@@ -14,8 +14,8 @@ namespace Dominio.Entities
         public DateTime DataNasc { get; set; }
         public string Endereco { get; set; }
         public string Senha { get; set; }
+        public List<Medicamento> Medicamentos { get; set; }
         public List<Exame> Exames { get; set; }
-   
         public List<Consulta> Consultas { get; set; }
     }
 }
