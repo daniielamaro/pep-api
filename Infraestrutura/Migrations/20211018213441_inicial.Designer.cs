@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Infraestrutura.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    [Migration("20211008003949_medicamento")]
-    partial class medicamento
+    [Migration("20211018213441_inicial")]
+    partial class inicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -95,15 +95,6 @@ namespace Infraestrutura.Migrations
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("ClinicaId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime?>("DataAtualizacao")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<DateTime>("DataCriacao")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<Guid>("Id")
                         .HasColumnType("uuid");
 
                     b.HasKey("ExameId", "ClinicaId");

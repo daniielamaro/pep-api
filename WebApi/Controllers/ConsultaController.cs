@@ -15,7 +15,7 @@ namespace WebApi.Controllers
     {
     
         [HttpPost("CadastroConsulta")]
-        [Authorize]
+        //[Authorize]
         public async Task<IActionResult> CadastroConsulta(RequestCriarConsulta request)
         {
             try

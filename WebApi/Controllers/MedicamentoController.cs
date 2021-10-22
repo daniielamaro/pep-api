@@ -72,5 +72,14 @@ namespace WebApi.Controllers
                 return BadRequest(e.Message);
             }
         }
+        [HttpPut("UpdateMedicamento")]
+        public async Task<IActionResult> UpdateMedicamento(RequestMedicamentoUpdate request)
+        {
+            var medicamentoApp = new MedicamentoApp();
+
+            await medicamentoApp.UpdateMedicamento( request.Id,request.Nome, request.Quantidade, request.Intervalo, request.UsoContinuo);
+
+            return Ok();
+        }
     }
 }

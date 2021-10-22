@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Dominio.Entities
 {
-    public class ClinicaTipoExames: Entidade
+    public class ClinicaTipoExames
     {
         public Guid ExameId { get; set; }
         public ExameTipo ExameTipo { get; set; }

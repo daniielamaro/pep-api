@@ -65,5 +65,71 @@ namespace Aplicacao
 
             return await context.TiposExames.AsNoTracking().OrderBy(x => x.Nome).ToListAsync();
         }
+
+        public async Task<object> UpdateTipoExame(Guid Id, string nome, string descricao)
+        {
+            using var context = new ApiContext();
+
+            var ExameOld = await context.TiposExames.AsNoTracking().Where(x => x.Id == Id).SingleOrDefaultAsync();
+
+            if (descricao == null || descricao == "")
+            {
+                ExameOld.Nome = nome;
+            }
+            else if (nome == null || nome == "")
+            {
+                ExameOld.Descricao = descricao;
+
+            }
+            else
+            {
+                ExameOld.Nome = nome;
+                ExameOld.Descricao = descricao;
+
+
+            }
+
+            ExameOld.DataAtualizacao = DateTime.Now;
+
+            context.TiposExames.Update(ExameOld);
+            await context.SaveChangesAsync();
+
+            return ExameOld;
+        }
+
+        public async Task<object> UpdateExame(Guid Id, Guid TipoId, bool Publico, string Observacao)
+        {
+            using var context = new ApiContext();
+
+            var ExameOld = await context.Exames.AsNoTracking().Where(x => x.Id == Id).SingleOrDefaultAsync();
+
+            var tipoExame = await context.TiposExames.AsNoTracking().Where(x => x.Id == TipoId).SingleOrDefaultAsync();
+
+
+            if (TipoId == Guid.Empty)
+            {
+                ExameOld.Publico = Publico;
+                ExameOld.Observacoes = Observacao;
+            }
+            else if (Observacao == null || Observacao == "")
+            {
+                ExameOld.Publico = Publico;
+                ExameOld.Tipo = tipoExame;
+            }
+            else
+            {
+                ExameOld.Publico = Publico;
+                ExameOld.Observacoes = Observacao;
+                ExameOld.Tipo = tipoExame;
+            }
+
+            ExameOld.DataAtualizacao = DateTime.Now;
+
+            context.Exames.Update(ExameOld);
+
+            await context.SaveChangesAsync();
+
+            return ExameOld;
+        }
     }
 }

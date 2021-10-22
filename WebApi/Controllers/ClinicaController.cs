@@ -26,7 +26,7 @@ namespace WebApi.Controllers
                 };
                 var ClinicaApp = new ClinicaApp();
 
-                await ClinicaApp.CadastrarClinica(newClinica,  clinicaRequest.IdConsulta, clinicaRequest.IdTipoExame);
+                await ClinicaApp.CadastrarClinica(newClinica);
 
                 return Ok();
             }
@@ -35,6 +35,26 @@ namespace WebApi.Controllers
                 return BadRequest(e.Message);
             }
         }
+        [HttpPost("CadastroTipoConsulta")]
+        public async Task<IActionResult> CadastroTipoDeConsulta(Guid IdClinica, Guid IdConsulta)
+        {
+            var clinicaApp = new ClinicaApp();
+
+            await clinicaApp.CadastroTipoDeConsulta(IdClinica, IdConsulta);
+
+            return Ok();
+        }
+
+        [HttpPost("CadastroTipoExame")]
+        public async Task<IActionResult> CadastroTipoDeExame(Guid IdClinica, Guid IdExame)
+        {
+            var clinicaApp = new ClinicaApp();
+
+            await clinicaApp.CadastroTipoDeExame(IdClinica, IdExame);
+
+            return Ok();
+        }
+
 
         [HttpPost("GetClinica")]
         //[Authorize]

@@ -95,15 +95,6 @@ namespace Infraestrutura.Migrations
                     b.Property<Guid>("ClinicaId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime?>("DataAtualizacao")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<DateTime>("DataCriacao")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<Guid>("Id")
-                        .HasColumnType("uuid");
-
                     b.HasKey("ExameId", "ClinicaId");
 
                     b.HasIndex("ClinicaId");

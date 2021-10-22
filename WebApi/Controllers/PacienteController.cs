@@ -85,7 +85,7 @@ namespace WebApi.Controllers
             
         }
 
-        [HttpPost("AlterarFotoPerfil")]
+        [HttpPut("AlterarFotoPerfil")]
         [Authorize]
         public async Task<IActionResult> AlterarFotoPerfil(RequestSetFotoPerfil request)
         {
@@ -111,7 +111,17 @@ namespace WebApi.Controllers
             }
         }
 
-        [HttpPost("DeletarFotoPerfil")]
+        [HttpPut("AlterarPaciente")]
+        public async Task<IActionResult> UpdatePaciente(RequestUpdatePaciente request)
+        {
+            var pacienteApp = new PacienteApp();
+
+            await pacienteApp.UpdatePaciente(request.Email, request.Endereco, request.Senha, request.Id);
+
+            return Ok();
+        }
+
+        [HttpDelete("DeletarFotoPerfil")]
         [Authorize]
         public async Task<IActionResult> DeletarFotoPerfil(Guid id)
         {

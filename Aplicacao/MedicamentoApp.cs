@@ -56,5 +56,24 @@ namespace Aplicacao
             return medicamento;
 
         }
+
+        public async Task<object> UpdateMedicamento(Guid id, string nome, string quantidade, string intervalo, bool usoContinuo)
+        {
+            using var context = new ApiContext();
+
+                var MedicamentoOld = await context.Medicamentos.AsNoTracking().Where(x => x.Id == id).SingleOrDefaultAsync();
+
+            MedicamentoOld.Nome = nome;
+            MedicamentoOld.Quantidade = quantidade;
+            MedicamentoOld.Intervalo = intervalo;
+            MedicamentoOld.UsoContinuo = usoContinuo;
+            MedicamentoOld.DataAtualizacao = DateTime.Now;
+
+            context.Medicamentos.Update(MedicamentoOld);
+
+            await context.SaveChangesAsync();
+
+            return MedicamentoOld;
+        }
     }
 }

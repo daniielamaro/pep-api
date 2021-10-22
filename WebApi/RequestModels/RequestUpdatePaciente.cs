@@ -5,10 +5,12 @@ using System.Threading.Tasks;
 
 namespace WebApi.RequestModels
 {
-    public class RequestClinica
+    public class RequestUpdatePaciente
     {
-        public string NomeClinica { get; set; }
+        public string Email { get; set; }
         public string Endereco { get; set; }
+        public string Senha { get; set; }
+        public Guid Id { get; set; }
 
     }
 }

@@ -90,5 +90,26 @@ namespace WebApi.Controllers
                 return BadRequest(e.Message);
             }
         }
+        [HttpPut("UpdateTipoExames")]
+        public async Task<IActionResult> UpdateTipoExames(RequestUpdateExame updateExame)
+        {
+             var ExameApp = new ExameApp();
+
+            await ExameApp.UpdateTipoExame(updateExame.Id, updateExame.Nome, updateExame.Descricao);
+
+            return Ok();
+
+        }
+
+        [HttpPut("UpdateExames")]
+        public async Task<IActionResult> UpdateExames(RequestExames updateExame)
+        {
+            var ExameApp = new ExameApp();
+
+            await ExameApp.UpdateExame(updateExame.Id, updateExame.TipoId, updateExame.Publico, updateExame.Observacao);
+
+            return Ok();
+
+        }
     }
 }

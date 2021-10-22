@@ -26,8 +26,8 @@ namespace Aplicacao
 
             consultas.Tipo = tipoConsulta;
 
-            if (paciente.Consultas == null)
-                paciente.Consultas = new List<Consulta>();
+            //if (paciente.Consultas == null)
+                //paciente.Consultas = new List<Consulta>();
 
             paciente.Consultas.Add(consultas);
 
@@ -70,6 +70,11 @@ namespace Aplicacao
 
             return await context.TiposConsultas.AsNoTracking().ToListAsync();
         }
+
+        /*public async Task<object> UpdateConsultaTipo()
+        {
+
+        }*/
 
     }
 }

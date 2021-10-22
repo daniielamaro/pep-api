@@ -124,10 +124,7 @@ namespace Infraestrutura.Migrations
                 columns: table => new
                 {
                     ExameId = table.Column<Guid>(nullable: false),
-                    ClinicaId = table.Column<Guid>(nullable: false),
-                    Id = table.Column<Guid>(nullable: false),
-                    DataCriacao = table.Column<DateTime>(nullable: false),
-                    DataAtualizacao = table.Column<DateTime>(nullable: true)
+                    ClinicaId = table.Column<Guid>(nullable: false)
                 },
                 constraints: table =>
                 {
@@ -212,6 +209,31 @@ namespace Infraestrutura.Migrations
                         onDelete: ReferentialAction.SetNull);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Medicamentos",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(nullable: false),
+                    DataCriacao = table.Column<DateTime>(nullable: false),
+                    DataAtualizacao = table.Column<DateTime>(nullable: true),
+                    Nome = table.Column<string>(nullable: false),
+                    Quantidade = table.Column<string>(nullable: false),
+                    Intervalo = table.Column<string>(nullable: false),
+                    DataTermino = table.Column<DateTime>(nullable: true),
+                    UsoContinuo = table.Column<bool>(nullable: false),
+                    PacienteId = table.Column<Guid>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Medicamentos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Medicamentos_Pacientes_PacienteId",
+                        column: x => x.PacienteId,
+                        principalTable: "Pacientes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_ClinicaConsultaTipos_ClinicaId",
                 table: "ClinicaConsultaTipos",
@@ -248,6 +270,11 @@ namespace Infraestrutura.Migrations
                 column: "TipoId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Medicamentos_PacienteId",
+                table: "Medicamentos",
+                column: "PacienteId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Pacientes_FotoPerfilId",
                 table: "Pacientes",
                 column: "FotoPerfilId");
@@ -268,16 +295,19 @@ namespace Infraestrutura.Migrations
                 name: "Exames");
 
             migrationBuilder.DropTable(
+                name: "Medicamentos");
+
+            migrationBuilder.DropTable(
                 name: "Clinicas");
 
             migrationBuilder.DropTable(
                 name: "TiposConsultas");
 
             migrationBuilder.DropTable(
-                name: "Pacientes");
+                name: "TiposExames");
 
             migrationBuilder.DropTable(
-                name: "TiposExames");
+                name: "Pacientes");
 
             migrationBuilder.DropTable(
                 name: "Arquivos");

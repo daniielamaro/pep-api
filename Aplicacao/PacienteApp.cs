@@ -74,6 +74,26 @@ namespace Aplicacao
             return paciente;
         }
 
+        public async Task<object> UpdatePaciente(string email, string endereco, string senha, Guid id)
+        {
+            using var context = new ApiContext();
+
+            var pacienteOld = await context.Pacientes.AsNoTracking().Where(x => x.Id == id).SingleOrDefaultAsync();
+
+            pacienteOld.Email = email;
+            pacienteOld.Endereco = endereco;
+            pacienteOld.Senha = senha;
+            pacienteOld.DataAtualizacao = DateTime.Now;
+
+
+            context.Pacientes.Update(pacienteOld);
+
+            await context.SaveChangesAsync();
+
+            return pacienteOld;
+            
+        }
+
         public async Task DeletarFotoPerfil(Guid Id)
         {
             using var context = new ApiContext();
