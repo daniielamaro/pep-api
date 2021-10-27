@@ -22,10 +22,11 @@ namespace WebApi.Controllers
                 {
                     Resultado = new Arquivo
                     {
-                        Nome = exame.Arquvio.Nome,
-                        Tipo = exame.Arquvio.Tipo,
-                        Binario = exame.Arquvio.Binario
+                        Nome = exame.Arquivo.Nome,
+                        Tipo = exame.Arquivo.Tipo,
+                        Binario = exame.Arquivo.Binario
                     },
+                    DiaRealizacao = DateTime.Parse(exame.DataRealizacao),
                     Observacoes = exame.Observacoes,
                     Publico = exame.Publico,
                     DataCriacao = DateTime.Now
@@ -90,18 +91,8 @@ namespace WebApi.Controllers
                 return BadRequest(e.Message);
             }
         }
-        [HttpPut("UpdateTipoExames")]
-        public async Task<IActionResult> UpdateTipoExames(RequestUpdateExame updateExame)
-        {
-             var ExameApp = new ExameApp();
 
-            await ExameApp.UpdateTipoExame(updateExame.Id, updateExame.Nome, updateExame.Descricao);
-
-            return Ok();
-
-        }
-
-        [HttpPut("UpdateExames")]
+        /*[HttpPut("UpdateExames")]
         public async Task<IActionResult> UpdateExames(RequestExames updateExame)
         {
             var ExameApp = new ExameApp();
@@ -110,6 +101,6 @@ namespace WebApi.Controllers
 
             return Ok();
 
-        }
+        }*/
     }
 }

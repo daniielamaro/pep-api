@@ -15,16 +15,17 @@ namespace WebApi.Controllers
     {
     
         [HttpPost("CadastroConsulta")]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> CadastroConsulta(RequestCriarConsulta request)
         {
             try
             {
                 var newConsulta = new Consulta
                 {
-                    Id = Guid.NewGuid(),
                     Observacoes = request.Observacoes,
+                    Publico = request.Publico,
                     Resumo = request.Resumo,
+                    DiaRealizacao = DateTime.Parse(request.DiaRealizacao),
                     DataCriacao = DateTime.Now
                 };
 

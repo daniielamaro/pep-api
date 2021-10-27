@@ -3,15 +3,17 @@ using System;
 using Infraestrutura;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Infraestrutura.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    partial class ApiContextModelSnapshot : ModelSnapshot
+    [Migration("20211026042953_diarealizacao-consulta")]
+    partial class diarealizacaoconsulta
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -122,9 +124,6 @@ namespace Infraestrutura.Migrations
 
                     b.Property<Guid?>("PacienteId")
                         .HasColumnType("uuid");
-
-                    b.Property<bool>("Publico")
-                        .HasColumnType("boolean");
 
                     b.Property<string>("Resumo")
                         .HasColumnType("text");

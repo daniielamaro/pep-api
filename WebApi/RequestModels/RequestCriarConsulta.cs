@@ -9,6 +9,8 @@ namespace WebApi.RequestModels
     {
         public Guid IdPaciente { get; set; }
         public Guid IdTipoConsulta { get; set; }
+        public string DiaRealizacao { get; set; }
+        public bool Publico { get; set; }
         public string Resumo { get; set; }
         public string Observacoes { get; set; }
     }

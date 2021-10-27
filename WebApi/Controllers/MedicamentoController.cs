@@ -20,7 +20,6 @@ namespace WebApi.Controllers
             {
                 var newMedicamento = new Medicamento
                 {
-                    Id = Guid.NewGuid(),
                     Nome = request.Nome,
                     Quantidade = request.Quantidade,
                     Intervalo = request.Intervalo,

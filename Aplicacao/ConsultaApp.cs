@@ -26,8 +26,8 @@ namespace Aplicacao
 
             consultas.Tipo = tipoConsulta;
 
-            //if (paciente.Consultas == null)
-                //paciente.Consultas = new List<Consulta>();
+            if (paciente.Consultas == null)
+                paciente.Consultas = new List<Consulta>();
 
             paciente.Consultas.Add(consultas);
 
@@ -52,7 +52,7 @@ namespace Aplicacao
             return paciente.Consultas;
         }
 
-        public async Task<object> GetConsultaById(Guid Id)
+        public async Task<Consulta> GetConsultaById(Guid Id)
         {
             using var context = new ApiContext();
 
