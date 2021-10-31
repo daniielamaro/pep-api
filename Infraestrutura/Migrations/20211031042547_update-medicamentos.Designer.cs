@@ -3,15 +3,17 @@ using System;
 using Infraestrutura;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Infraestrutura.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    partial class ApiContextModelSnapshot : ModelSnapshot
+    [Migration("20211031042547_update-medicamentos")]
+    partial class updatemedicamentos
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -242,9 +244,6 @@ namespace Infraestrutura.Migrations
                     b.Property<DateTime>("DataCriacao")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<DateTime>("DataInicio")
-                        .HasColumnType("timestamp without time zone");
-
                     b.Property<DateTime?>("DataTermino")
                         .HasColumnType("timestamp without time zone");
 
@@ -261,8 +260,8 @@ namespace Infraestrutura.Migrations
                     b.Property<string>("OutraQuantidade")
                         .HasColumnType("text");
 
-                    b.Property<string>("OutroIntervalo")
-                        .HasColumnType("text");
+                    b.Property<int>("OutroIntervalo")
+                        .HasColumnType("integer");
 
                     b.Property<Guid?>("PacienteId")
                         .HasColumnType("uuid");
@@ -270,8 +269,8 @@ namespace Infraestrutura.Migrations
                     b.Property<bool>("Publico")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("TipoIntervalo")
-                        .HasColumnType("text");
+                    b.Property<int>("TipoIntervalo")
+                        .HasColumnType("integer");
 
                     b.Property<string>("TipoQuantidade")
                         .HasColumnType("text");

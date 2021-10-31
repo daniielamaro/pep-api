@@ -3,15 +3,17 @@ using System;
 using Infraestrutura;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Infraestrutura.Migrations
 {
     [DbContext(typeof(ApiContext))]
-    partial class ApiContextModelSnapshot : ModelSnapshot
+    [Migration("20211030210138_medicamento-publico")]
+    partial class medicamentopublico
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -242,26 +244,15 @@ namespace Infraestrutura.Migrations
                     b.Property<DateTime>("DataCriacao")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<DateTime>("DataInicio")
-                        .HasColumnType("timestamp without time zone");
-
                     b.Property<DateTime?>("DataTermino")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<string>("Nome")
+                    b.Property<string>("Intervalo")
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("NumIntervalo")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("NumQuantidade")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("OutraQuantidade")
-                        .HasColumnType("text");
-
-                    b.Property<string>("OutroIntervalo")
+                    b.Property<string>("Nome")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<Guid?>("PacienteId")
@@ -270,10 +261,8 @@ namespace Infraestrutura.Migrations
                     b.Property<bool>("Publico")
                         .HasColumnType("boolean");
 
-                    b.Property<string>("TipoIntervalo")
-                        .HasColumnType("text");
-
-                    b.Property<string>("TipoQuantidade")
+                    b.Property<string>("Quantidade")
+                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<bool>("UsoContinuo")

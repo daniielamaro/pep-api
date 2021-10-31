@@ -16,18 +16,6 @@ namespace Infraestrutura.Configurations
             builder
                 .Property(u => u.Nome)
                 .IsRequired();
-
-            builder
-                .Property(u => u.Quantidade)
-                .IsRequired();
-
-            builder
-                .Property(u => u.Quantidade)
-                .IsRequired();
-
-            builder
-                .Property(u => u.Intervalo)
-                .IsRequired();
         }
     }
 }

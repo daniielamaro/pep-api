@@ -63,7 +63,7 @@ namespace Aplicacao
 
                 var MedicamentoOld = await context.Medicamentos.AsNoTracking().Where(x => x.Id == id).SingleOrDefaultAsync();
 
-            MedicamentoOld.Nome = nome;
+            /*MedicamentoOld.Nome = nome;
             MedicamentoOld.Quantidade = quantidade;
             MedicamentoOld.Intervalo = intervalo;
             MedicamentoOld.UsoContinuo = usoContinuo;
@@ -71,7 +71,7 @@ namespace Aplicacao
 
             context.Medicamentos.Update(MedicamentoOld);
 
-            await context.SaveChangesAsync();
+            await context.SaveChangesAsync();*/
 
             return MedicamentoOld;
         }

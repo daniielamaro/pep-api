@@ -10,9 +10,15 @@ namespace WebApi.RequestModels
     {
         public Guid IdPaciente { get; set; }
         public string Nome { get; set; }
-        public string Quantidade { get; set; }
-        public string Intervalo { get; set; }
-        public DateTime? DataTermino { get; set; }
+        public int NumQuantidade { get; set; }
+        public string TipoQuantidade { get; set; }
+        public string OutraQuantidade { get; set; }
+        public int NumIntervalo { get; set; }
+        public string TipoIntervalo { get; set; }
+        public string OutroIntervalo { get; set; }
+        public bool Publico { get; set; }
+        public string DataInicio { get; set; }
+        public string DataTermino { get; set; }
         public bool UsoContinuo { get; set; }
     }
 }

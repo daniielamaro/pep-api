@@ -21,12 +21,20 @@ namespace WebApi.Controllers
                 var newMedicamento = new Medicamento
                 {
                     Nome = request.Nome,
-                    Quantidade = request.Quantidade,
-                    Intervalo = request.Intervalo,
-                    DataTermino = request.DataTermino,
+                    NumQuantidade = request.NumQuantidade,
+                    TipoQuantidade = request.TipoQuantidade,
+                    OutraQuantidade = request.OutraQuantidade,
+                    NumIntervalo = request.NumIntervalo,
+                    TipoIntervalo = request.TipoIntervalo,
+                    OutroIntervalo = request.OutroIntervalo,
+                    Publico = request.Publico,
+                    DataInicio = DateTime.Parse(request.DataInicio),
                     UsoContinuo = request.UsoContinuo,
                     DataCriacao = DateTime.Now
                 };
+
+                if (!request.UsoContinuo)
+                    newMedicamento.DataTermino = DateTime.Parse(request.DataTermino);
 
                 var servico = new MedicamentoApp();
 
