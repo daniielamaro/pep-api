@@ -42,6 +42,7 @@ namespace WebApi
             });
 
             var key = Encoding.ASCII.GetBytes(Configuration.GetSection("Secret").Value);
+
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

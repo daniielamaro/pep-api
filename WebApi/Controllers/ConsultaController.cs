@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using WebApi.RequestModels;
 using Aplicacao;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace WebApi.Controllers
 {
@@ -15,9 +16,15 @@ namespace WebApi.Controllers
     {
     
         [HttpPost("CadastroConsulta")]
-        [Authorize]
+        [Authorize(Roles = "paciente,medico,enfermeiro")]
         public async Task<IActionResult> CadastroConsulta(RequestCriarConsulta request)
         {
+            var idPacienteToken = User.FindFirst(ClaimTypes.Sid)?.Value;
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
+
+            if (request.IdPaciente != Guid.Parse(idPacienteToken) && role == "paciente")
+                return BadRequest("Você não tem permissão de cadastrar consultas de outro usuario!");
+
             try
             {
                 var newConsulta = new Consulta
@@ -43,9 +50,15 @@ namespace WebApi.Controllers
 
 
         [HttpPost("ListaConsulta")]
-        [Authorize]
+        [Authorize(Roles = "paciente,medico,enfermeiro")]
         public async Task<IActionResult> ListaConsulta(Guid idPaciente)
         {
+            var idPacienteToken = User.FindFirst(ClaimTypes.Sid)?.Value;
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
+
+            if (idPaciente != Guid.Parse(idPacienteToken) && role == "paciente")
+                return BadRequest("Você não tem permissão de listar consultas de outro usuario!");
+
             try
             {
                 var consultApp = new ConsultaApp();
@@ -59,7 +72,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("GetConsultaById")]
-        [Authorize]
+        [Authorize(Roles = "paciente,medico,enfermeiro")]
         public async Task<IActionResult> GetConsultaById(Guid id)
         {
             try

@@ -24,9 +24,7 @@ namespace WebApi.Servicos
                 Subject = new ClaimsIdentity(new Claim[]
                 {
                     new Claim(ClaimTypes.Sid, paciente.Id.ToString()),
-                    new Claim(ClaimTypes.Name, paciente.Nome),
-                    new Claim(ClaimTypes.NameIdentifier, paciente.Cpf),
-                    new Claim(ClaimTypes.Email, paciente.Email)
+                    new Claim(ClaimTypes.Role, "paciente")
                 }),
 
                 Expires = DateTime.UtcNow.AddDays(1),

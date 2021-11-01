@@ -5,6 +5,7 @@ using Aplicacao;
 using System.Threading.Tasks;
 using WebApi.RequestModels;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace WebApi.Controllers
 {
@@ -13,9 +14,15 @@ namespace WebApi.Controllers
     public class MedicamentoController : ControllerBase
     {
         [HttpPost("Cadastro")]
-        [Authorize]
+        [Authorize(Roles = "paciente,medico,enfermeiro")]
         public async Task<IActionResult> Cadastro(RequestCriarMedicamento request)
         {
+            var idPacienteToken = User.FindFirst(ClaimTypes.Sid)?.Value;
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
+
+            if (request.IdPaciente != Guid.Parse(idPacienteToken) && role == "paciente")
+                return BadRequest("Você não tem permissão de cadastrar medicamentos de outro usuario!");
+
             try
             {
                 var newMedicamento = new Medicamento
@@ -49,9 +56,15 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("ConsultarListaMedicamento")]
-        [Authorize]
+        [Authorize(Roles = "paciente,medico,enfermeiro")]
         public async Task<IActionResult> ConsultarListaMedicamento(Guid idPaciente)
         {
+            var idPacienteToken = User.FindFirst(ClaimTypes.Sid)?.Value;
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
+
+            if (idPaciente != Guid.Parse(idPacienteToken) && role == "paciente")
+                return BadRequest("Você não tem permissão de listar medicamentos de outro usuario!");
+
             try
             {
                 var servico = new MedicamentoApp();
@@ -65,7 +78,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("ConsultarMedicamentoById")]
-        [Authorize]
+        [Authorize(Roles = "paciente,medico,enfermeiro")]
         public async Task<IActionResult> ConsultarMedicamentoById(Guid idMedicamento) 
         {
             try
@@ -78,15 +91,6 @@ namespace WebApi.Controllers
             {
                 return BadRequest(e.Message);
             }
-        }
-        [HttpPut("UpdateMedicamento")]
-        public async Task<IActionResult> UpdateMedicamento(RequestMedicamentoUpdate request)
-        {
-            var medicamentoApp = new MedicamentoApp();
-
-            await medicamentoApp.UpdateMedicamento( request.Id,request.Nome, request.Quantidade, request.Intervalo, request.UsoContinuo);
-
-            return Ok();
         }
     }
 }

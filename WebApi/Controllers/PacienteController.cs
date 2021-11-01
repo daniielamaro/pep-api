@@ -1,9 +1,13 @@
 ﻿using System;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Aplicacao;
 using Dominio.Entities;
+using Infraestrutura;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using WebApi.RequestModels;
 using WebApi.Servicos;
 
@@ -86,12 +90,19 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("AlterarFotoPerfil")]
-        [Authorize]
+        [Authorize(Roles = "paciente")]
         public async Task<IActionResult> AlterarFotoPerfil(RequestSetFotoPerfil request)
         {
+            var idPacienteToken = User.FindFirst(ClaimTypes.Sid)?.Value;
+
+            if (request.Id != Guid.Parse(idPacienteToken))
+                return BadRequest("Você não tem permissão de alterar a foto de outro usuario!");
+
             try
             {
                 var pacienteApp = new PacienteApp();
+
+                
 
                 var paciente = await pacienteApp.AlterarFotoPerfil(
                     request.Id,
@@ -111,22 +122,17 @@ namespace WebApi.Controllers
             }
         }
 
-        /*[HttpPut("AlterarPaciente")]
-        public async Task<IActionResult> UpdatePaciente(RequestUpdatePaciente request)
-        {
-            var pacienteApp = new PacienteApp();
-
-            await pacienteApp.UpdatePaciente(request.Email, request.Endereco, request.Senha, request.Id);
-
-            return Ok();
-        }*/
-
         [HttpDelete("DeletarFotoPerfil")]
-        [Authorize]
+        [Authorize(Roles = "paciente")]
         public async Task<IActionResult> DeletarFotoPerfil(Guid id)
         {
+            var idPacienteToken = User.FindFirst(ClaimTypes.Sid)?.Value;
+
+            if (id != Guid.Parse(idPacienteToken))
+                return BadRequest("Você não tem permissão de deletar a foto de outro usuario!");
+
             try
-            {
+            { 
                 var pacienteApp = new PacienteApp();
 
                 await pacienteApp.DeletarFotoPerfil(id);

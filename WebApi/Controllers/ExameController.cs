@@ -5,6 +5,7 @@ using Aplicacao;
 using System.Threading.Tasks;
 using WebApi.RequestModels;
 using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
 
 namespace WebApi.Controllers
 {
@@ -13,9 +14,16 @@ namespace WebApi.Controllers
     public class ExameController : ControllerBase
     {
         [HttpPost("CadastroExame")]
-        [Authorize]
+        [Authorize(Roles = "paciente,medico,enfermeiro")]
         public async Task<IActionResult> CadastroExame(RequestCriarExame exame)
         {
+            var idPacienteToken = User.FindFirst(ClaimTypes.Sid)?.Value;
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
+
+            if (exame.IdPaciente != Guid.Parse(idPacienteToken) && role == "paciente")
+                return BadRequest("Você não tem permissão de cadastrar exames de outro usuario!");
+
+
             try
             {
                 var newExame = new Exame
@@ -44,9 +52,15 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("ConsultarListaExame")]
-        [Authorize]
+        [Authorize(Roles = "paciente,medico,enfermeiro")]
         public async Task<IActionResult> ConsultarListaExame(Guid id)
         {
+            var idPacienteToken = User.FindFirst(ClaimTypes.Sid)?.Value;
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
+
+            if (id != Guid.Parse(idPacienteToken) && role == "paciente")
+                return BadRequest("Você não tem permissão de listar exames de outro usuario!");
+
             try
             {
                 var ExameApp = new ExameApp();
@@ -60,7 +74,7 @@ namespace WebApi.Controllers
         }
 
         [HttpPost("ConsultarExameById")]
-        [Authorize]
+        [Authorize(Roles = "paciente,medico,enfermeiro")]
         public async Task<IActionResult> ConsultarExameById(Guid id) 
         {
             try
@@ -91,16 +105,5 @@ namespace WebApi.Controllers
                 return BadRequest(e.Message);
             }
         }
-
-        /*[HttpPut("UpdateExames")]
-        public async Task<IActionResult> UpdateExames(RequestExames updateExame)
-        {
-            var ExameApp = new ExameApp();
-
-            await ExameApp.UpdateExame(updateExame.Id, updateExame.TipoId, updateExame.Publico, updateExame.Observacao);
-
-            return Ok();
-
-        }*/
     }
 }
