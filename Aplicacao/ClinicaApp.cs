@@ -1,9 +1,11 @@
 ﻿using Dominio.Entities;
 using Infraestrutura;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace Aplicacao
@@ -14,7 +16,6 @@ namespace Aplicacao
         {
             using var context = new ApiContext();
 
-
             var newClinica = new Clinica
             {
                 NomeClinica = clinica.NomeClinica,
@@ -22,16 +23,12 @@ namespace Aplicacao
                 ConsultaTipos = new List<ClinicaConsultaTipo>(),
                 ExameTipos = new List<ClinicaTipoExames>(),
                 DataCriacao = DateTime.Now
-                
-                
             };
 
             context.Clinicas.Add(newClinica);
 
             await context.SaveChangesAsync();
         }
-
-
 
         public async Task CadastroTipoDeConsulta(Guid IdClinica, Guid IdConsulta)
         {
@@ -87,28 +84,50 @@ namespace Aplicacao
 
         }
 
-        public async Task<object> GetClinica(Guid id)
+        public async Task<List<ClinicaByDistance>> GetClinica(string key, string coordenadaOrigem)
         {
             using var context = new ApiContext();
 
-            var clinica = await context.Clinicas.AsNoTracking()
-                                .Include(x => x.ConsultaTipos)
-                                    .ThenInclude(x => x.ConsultaTipo)
-                                .Include(x => x.ExameTipos)
-                                    .ThenInclude(x => x.ExameTipo)
-                                .Where(c => c.Id == id)
-                                .FirstOrDefaultAsync();
+            var clinicas = await context.Clinicas.Include(x => x.Endereco).AsNoTracking().ToListAsync();
 
-            if (clinica == null)
-                throw new Exception("Clinica não encontrada!");
+            List<ClinicaByDistance> resposta = new List<ClinicaByDistance>();
 
-            return new
+            string endDestinos = "";
+
+            for (int i = 0; i < clinicas.Count; i++)
             {
-                clinica.NomeClinica,
-                clinica.Endereco,
-                TiposConsulta = clinica.ConsultaTipos.Select(x => x.ConsultaTipo).Select(x => new { x.Nome, x.Descricao } ).ToList(),
-                TiposExame = clinica.ExameTipos.Select(x => x.ExameTipo).Select(x => new { x.Nome, x.Descricao }).ToList()
-            };
+                var endereco = clinicas[i].Endereco;
+
+                endDestinos += endereco.Logradouro + 
+                    (string.IsNullOrWhiteSpace(endereco.Numero) ? ", S/N" : ", " + endereco.Numero) + 
+                    " - " +
+                    endereco.Bairro + ", " +
+                    endereco.Localidade + " - " + endereco.UF + ", Brazil";
+
+                if (i + 1 < clinicas.Count) endDestinos += "|";
+            }
+
+            using HttpClient client = new HttpClient();
+
+            HttpResponseMessage response = await client.GetAsync("https://maps.googleapis.com/maps/api/distancematrix/json?destinations="+endDestinos+ "&origins="+coordenadaOrigem+"&key="+key);
+            if (response.IsSuccessStatusCode)
+            {
+                var respostaStr = await response.Content.ReadAsStringAsync();
+                var respostaObj = JsonConvert.DeserializeObject<RespostaDistanciaGM>(respostaStr);
+
+                for (int i = 0; i < clinicas.Count; i++)
+                {
+                    resposta.Add(new ClinicaByDistance
+                    {
+                        Origem = respostaObj.Origin_addresses[0],
+                        Clinica = clinicas[i],
+                        Distancia = respostaObj.Rows[0].Elements[i].Distance.Value,
+                        Duracao = respostaObj.Rows[0].Elements[i].Duration.Value
+                    });
+                }
+            }
+
+            return resposta.OrderBy(x => x.Distancia).ToList();
         }
     }
 }

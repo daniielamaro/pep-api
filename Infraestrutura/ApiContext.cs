@@ -12,6 +12,7 @@ namespace Infraestrutura
         public DbSet<Paciente> Pacientes { get; set; }
         public DbSet<Arquivo> Arquivos { get; set; }
         public DbSet<Exame> Exames { get; set; }
+        public DbSet<Endereco> Enderecos { get; set; }
         public DbSet<Clinica> Clinicas { get; set; }
         public DbSet<ExameTipo> TiposExames { get; set; }
         public DbSet<Consulta> Consultas { get; set; }
@@ -36,6 +37,7 @@ namespace Infraestrutura
             modelBuilder.ApplyConfiguration(new ExameTipoConfiguration());
             modelBuilder.ApplyConfiguration(new ConsultaConfiguration());
             modelBuilder.ApplyConfiguration(new ConsultaTipoConfiguration());
+            modelBuilder.ApplyConfiguration(new EnderecoConfiguration());
             modelBuilder.ApplyConfiguration(new ClinicaConfiguration());
             modelBuilder.ApplyConfiguration(new MedicamentoConfiguration());
             modelBuilder.ApplyConfiguration(new ClinicaTipoExameConfiguration());

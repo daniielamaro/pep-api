@@ -1,5 +1,6 @@
 ﻿using Aplicacao;
 using Dominio.Entities;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -15,14 +16,22 @@ namespace WebApi.Controllers
     {
         [HttpPost("CadastroClinica")]
         //[Authorize]
-        public async Task<IActionResult> CadastroExame(RequestClinica clinicaRequest)
+        public async Task<IActionResult> CadastroExame(RequestClinica request)
         {
             try
             {
                 var newClinica = new Clinica
                 {
-                   Endereco = clinicaRequest.Endereco,
-                   NomeClinica = clinicaRequest.NomeClinica
+                   Endereco = new Endereco
+                   {
+                        Logradouro = request.Logradouro,
+                        Numero = request.Numero,
+                        CEP = request.CEP,
+                        Bairro = request.Bairro,
+                        Localidade = request.Localidade,
+                        UF = request.UF
+                   },
+                   NomeClinica = request.NomeClinica
                 };
                 var ClinicaApp = new ClinicaApp();
 
@@ -56,17 +65,17 @@ namespace WebApi.Controllers
         }
 
 
-        [HttpPost("GetClinica")]
-        //[Authorize]
-        public async Task<IActionResult> GetClinica()
+        [HttpPost("GetListaClinicaByDistancia")]
+        [Authorize(Roles = "paciente")]
+        public async Task<IActionResult> GetListaClinicaByDistancia(string coordenada)
         {
+            string key = Startup.Configuration.GetSection("MAPSKey").Value;
+
             try
             {
                 var clinicaApp = new ClinicaApp();
 
-                var teste = await clinicaApp.GetClinica(new Guid("3fa85f64-5717-4562-b3fc-2c963f66afa6"));
-
-                return Ok(teste);
+                return Ok(await clinicaApp.GetClinica(key, coordenada));
             }
             catch (Exception e)
             {

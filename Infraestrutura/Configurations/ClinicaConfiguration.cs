@@ -17,18 +17,13 @@ namespace Infraestrutura.Configurations
                 .Property(u => u.NomeClinica)
                 .IsRequired();
 
-            builder
-                .Property(u => u.Endereco)
-                .IsRequired();
+            builder.HasOne(u => u.Endereco)
+                .WithMany()
+                .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasMany(u => u.ExameTipos);
 
-
-
             builder.HasMany(u => u.ConsultaTipos);
-                    
         }
-
-
     }
 }
