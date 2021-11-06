@@ -16,6 +16,10 @@ namespace Infraestrutura.Configurations
             builder
                 .Property(u => u.Nome)
                 .IsRequired();
+
+            builder.HasOne(u => u.Receita)
+                .WithMany()
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

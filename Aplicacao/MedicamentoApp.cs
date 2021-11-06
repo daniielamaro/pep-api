@@ -15,7 +15,10 @@ namespace Aplicacao
         {
             using var context = new ApiContext();
 
-            var paciente = await context.Pacientes.Include(x => x.Medicamentos).Where(x => x.Id == idPaciente).FirstOrDefaultAsync();
+            var paciente = await context.Pacientes
+                .Include(x => x.Medicamentos)
+                    .ThenInclude(x => x.Receita)
+                .Where(x => x.Id == idPaciente).FirstOrDefaultAsync();
 
             if (paciente == null)
                 throw new Exception("Paciente não encontrado!");
@@ -48,32 +51,13 @@ namespace Aplicacao
         {
             using var context = new ApiContext();
 
-            var medicamento = await context.Medicamentos.AsNoTracking().Where(x => x.Id == idMedicamento).FirstOrDefaultAsync();
+            var medicamento = await context.Medicamentos.AsNoTracking().Include(x => x.Receita).Where(x => x.Id == idMedicamento).FirstOrDefaultAsync();
 
             if (medicamento == null)
                 throw new Exception("Medicamento não encontrado!");
 
             return medicamento;
 
-        }
-
-        public async Task<object> UpdateMedicamento(Guid id, string nome, string quantidade, string intervalo, bool usoContinuo)
-        {
-            using var context = new ApiContext();
-
-                var MedicamentoOld = await context.Medicamentos.AsNoTracking().Where(x => x.Id == id).SingleOrDefaultAsync();
-
-            /*MedicamentoOld.Nome = nome;
-            MedicamentoOld.Quantidade = quantidade;
-            MedicamentoOld.Intervalo = intervalo;
-            MedicamentoOld.UsoContinuo = usoContinuo;
-            MedicamentoOld.DataAtualizacao = DateTime.Now;
-
-            context.Medicamentos.Update(MedicamentoOld);
-
-            await context.SaveChangesAsync();*/
-
-            return MedicamentoOld;
         }
     }
 }

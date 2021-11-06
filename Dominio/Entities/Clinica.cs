@@ -8,7 +8,5 @@ namespace Dominio.Entities
     {
         public string NomeClinica { get; set; }
         public Endereco Endereco { get; set; }
-        public List<ClinicaConsultaTipo> ConsultaTipos { get; set; }
-        public List<ClinicaTipoExames> ExameTipos { get; set; }
     }
 }

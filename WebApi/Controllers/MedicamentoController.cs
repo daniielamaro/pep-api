@@ -23,6 +23,18 @@ namespace WebApi.Controllers
             if (request.IdPaciente != Guid.Parse(idPacienteToken) && role == "paciente")
                 return BadRequest("Você não tem permissão de cadastrar medicamentos de outro usuario!");
 
+            Arquivo receita = null;
+
+            if(request.Receita != null)
+            {
+                receita = new Arquivo
+                {
+                    Nome = request.Receita.Nome,
+                    Tipo = request.Receita.Tipo,
+                    Binario = request.Receita.Binario
+                };
+            }
+
             try
             {
                 var newMedicamento = new Medicamento
@@ -35,6 +47,9 @@ namespace WebApi.Controllers
                     TipoIntervalo = request.TipoIntervalo,
                     OutroIntervalo = request.OutroIntervalo,
                     Publico = request.Publico,
+                    InputByUser = request.InputByUser,
+                    TipoCadastro = request.TipoCadastro,
+                    Receita = receita,
                     DataInicio = DateTime.Parse(request.DataInicio),
                     UsoContinuo = request.UsoContinuo,
                     DataCriacao = DateTime.Now

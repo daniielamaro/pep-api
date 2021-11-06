@@ -20,68 +20,12 @@ namespace Aplicacao
             {
                 NomeClinica = clinica.NomeClinica,
                 Endereco = clinica.Endereco,
-                ConsultaTipos = new List<ClinicaConsultaTipo>(),
-                ExameTipos = new List<ClinicaTipoExames>(),
                 DataCriacao = DateTime.Now
             };
 
             context.Clinicas.Add(newClinica);
 
             await context.SaveChangesAsync();
-        }
-
-        public async Task CadastroTipoDeConsulta(Guid IdClinica, Guid IdConsulta)
-        {
-            using var context = new ApiContext();
-
-            var Clinica = await context.Clinicas.Where(x => x.Id == IdClinica).FirstOrDefaultAsync();
-
-            var Consulta = await context.TiposConsultas.Where(x => x.Id == IdConsulta).FirstOrDefaultAsync();
-           
-
-
-            if (Clinica == null)
-                throw new Exception("Clinica não encontrada");
-            else if (Consulta == null)
-                throw new Exception("Tipo de Consulta não encontrado");
-
-
-            var newConsulta = new ClinicaConsultaTipo
-            {
-                ClinicaId = Clinica.Id,
-                ConsultaId = Consulta.Id
-            };
-
-
-            context.ClinicaConsultaTipos.Add(newConsulta);
-
-            await context.SaveChangesAsync();
-        }
-
-
-        public async Task CadastroTipoDeExame(Guid IdClinica, Guid IdExame)
-        {
-            using var context = new ApiContext();
-
-            var Clinica = await context.Clinicas.Where(x => x.Id == IdClinica).FirstOrDefaultAsync();
-
-            var Exame = await context.TiposExames.Where(x => x.Id == IdExame).FirstOrDefaultAsync();
-
-            if (Clinica == null)
-                throw new Exception("Clinica não encontrada");
-            else if (Exame == null)
-                throw new Exception("Tipo de Exame não encontrado");
-
-            var NewExame = new ClinicaTipoExames
-            {
-                ClinicaId = Clinica.Id,
-                ExameId = Exame.Id
-            };
-
-            context.ClinicaExameTipos.Add(NewExame);
-
-            await context.SaveChangesAsync();
-
         }
 
         public async Task<List<ClinicaByDistance>> GetClinica(string key, string coordenadaOrigem)

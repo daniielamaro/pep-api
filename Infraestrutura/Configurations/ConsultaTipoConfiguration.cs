@@ -17,8 +17,6 @@ namespace Infraestrutura.Configurations
                 .Property(u => u.Nome)
                 .IsRequired();
 
-            builder.HasMany(u => u.ClinicasConsulta);
-
         }
     }
 }

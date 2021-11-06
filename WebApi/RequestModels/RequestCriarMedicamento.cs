@@ -17,6 +17,9 @@ namespace WebApi.RequestModels
         public string TipoIntervalo { get; set; }
         public string OutroIntervalo { get; set; }
         public bool Publico { get; set; }
+        public bool InputByUser { get; set; }
+        public int TipoCadastro { get; set; }
+        public RequestCriarArquivo Receita { get; set; }
         public string DataInicio { get; set; }
         public string DataTermino { get; set; }
         public bool UsoContinuo { get; set; }

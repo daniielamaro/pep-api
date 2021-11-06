@@ -20,10 +20,6 @@ namespace Infraestrutura.Configurations
             builder.HasOne(u => u.Endereco)
                 .WithMany()
                 .OnDelete(DeleteBehavior.Restrict);
-
-            builder.HasMany(u => u.ExameTipos);
-
-            builder.HasMany(u => u.ConsultaTipos);
         }
     }
 }

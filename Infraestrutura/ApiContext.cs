@@ -18,8 +18,6 @@ namespace Infraestrutura
         public DbSet<Consulta> Consultas { get; set; }
         public DbSet<Medicamento> Medicamentos { get; set; }
         public DbSet<ConsultaTipo> TiposConsultas { get; set; }
-        public DbSet<ClinicaConsultaTipo> ClinicaConsultaTipos { get; set; }
-        public DbSet<ClinicaTipoExames> ClinicaExameTipos { get; set; }
 
         private readonly string ConectionString = "Server=35.184.198.60;Port=5432;Database=postgres;User Id=unisuam;Password=@Unisuam1234;";
 
@@ -40,8 +38,6 @@ namespace Infraestrutura
             modelBuilder.ApplyConfiguration(new EnderecoConfiguration());
             modelBuilder.ApplyConfiguration(new ClinicaConfiguration());
             modelBuilder.ApplyConfiguration(new MedicamentoConfiguration());
-            modelBuilder.ApplyConfiguration(new ClinicaTipoExameConfiguration());
-            modelBuilder.ApplyConfiguration(new ClinicaTipoConsultaConfiguration());
 
             base.OnModelCreating(modelBuilder);
         }
