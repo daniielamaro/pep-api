@@ -109,7 +109,7 @@ namespace Aplicacao
 
             using HttpClient client = new HttpClient();
 
-            HttpResponseMessage response = await client.GetAsync("https://maps.googleapis.com/maps/api/distancematrix/json?destinations="+endDestinos+ "&origins="+coordenadaOrigem+"&key="+key);
+            HttpResponseMessage response = await client.GetAsync("https://maps.googleapis.com/maps/api/distancematrix/json?mode=WALKING&language=pt-BR&destinations=" + endDestinos+ "&origins="+coordenadaOrigem+"&key="+key);
             if (response.IsSuccessStatusCode)
             {
                 var respostaStr = await response.Content.ReadAsStringAsync();
