@@ -14,7 +14,6 @@ namespace Dominio.Entities
         public string TipoIntervalo { get; set; }
         public string OutroIntervalo { get; set; }
         public bool Publico { get; set; }
-        public bool InputByUser { get; set; }
         public int TipoCadastro { get; set; }
         public Arquivo Receita { get; set; }
         public DateTime DataInicio { get; set; }

@@ -47,7 +47,6 @@ namespace WebApi.Controllers
                     TipoIntervalo = request.TipoIntervalo,
                     OutroIntervalo = request.OutroIntervalo,
                     Publico = request.Publico,
-                    InputByUser = request.InputByUser,
                     TipoCadastro = request.TipoCadastro,
                     Receita = receita,
                     DataInicio = DateTime.Parse(request.DataInicio),
