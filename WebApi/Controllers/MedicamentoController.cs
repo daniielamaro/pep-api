@@ -106,5 +106,46 @@ namespace WebApi.Controllers
                 return BadRequest(e.Message);
             }
         }
+
+        [HttpPost("EditarMedicamento")]
+        [Authorize(Roles = "paciente,medico,enfermeiro")]
+        public async Task<IActionResult> EditarMedicamento(RequestEditarMedicamento request)
+        {
+            var idPacienteToken = User.FindFirst(ClaimTypes.Sid)?.Value;
+            var role = User.FindFirst(ClaimTypes.Role)?.Value;
+
+            try
+            {
+                var newMedicamento = new Medicamento
+                {
+                    Id = request.IdMedicamento,
+                    Nome = request.Nome,
+                    NumQuantidade = request.NumQuantidade,
+                    TipoQuantidade = request.TipoQuantidade,
+                    OutraQuantidade = request.OutraQuantidade,
+                    NumIntervalo = request.NumIntervalo,
+                    TipoIntervalo = request.TipoIntervalo,
+                    OutroIntervalo = request.OutroIntervalo,
+                    Publico = request.Publico,
+                    TipoCadastro = request.TipoCadastro,
+                    Receita = request.Receita,
+                    DataInicio = DateTime.Parse(request.DataInicio),
+                    UsoContinuo = request.UsoContinuo
+                };
+
+                if (!request.UsoContinuo)
+                    newMedicamento.DataTermino = DateTime.Parse(request.DataTermino);
+
+                var servico = new MedicamentoApp();
+
+                await servico.Editar(newMedicamento, role, Guid.Parse(idPacienteToken));
+
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
     }
 }
