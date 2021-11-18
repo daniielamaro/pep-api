@@ -9,6 +9,9 @@ namespace Infraestrutura
 {
     public class ApiContext : DbContext
     {
+        public DbSet<AgenteAdministrativo> AgentesAdministrativos { get; set; }
+        public DbSet<Medico> Medicos { get; set; }
+        public DbSet<Enfermeiro> Enfermeiros { get; set; }
         public DbSet<Paciente> Pacientes { get; set; }
         public DbSet<Arquivo> Arquivos { get; set; }
         public DbSet<Exame> Exames { get; set; }
@@ -29,6 +32,9 @@ namespace Infraestrutura
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.ApplyConfiguration(new MedicoConfiguration());
+            modelBuilder.ApplyConfiguration(new EnfermeiroConfiguration());
+            modelBuilder.ApplyConfiguration(new AgenteAdmConfiguration());
             modelBuilder.ApplyConfiguration(new PacienteConfiguration());
             modelBuilder.ApplyConfiguration(new ArquivoConfiguration());
             modelBuilder.ApplyConfiguration(new ExameConfiguration());
