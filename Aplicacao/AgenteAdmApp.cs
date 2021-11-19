@@ -41,6 +41,52 @@ namespace Aplicacao
                 throw new Exception("Agente administrativo não encontrado!");
         }
 
+        public async Task<object> GetListaFuncionario(Guid id)
+        {
+            using var context = new ApiContext();
+
+            var medicos = await context.Medicos.AsNoTracking().Where(x => x.Clinica.Id == id).ToListAsync();
+            var enfermeiros = await context.Enfermeiros.AsNoTracking().Where(x => x.Clinica.Id == id).ToListAsync();
+            var agentes = await context.AgentesAdministrativos.AsNoTracking().Where(x => x.Clinica.Id == id).ToListAsync();
+
+            List<object> retorno = new List<object>();
+
+            foreach (var medico in medicos)
+            {
+                retorno.Add(new
+                {
+                    medico.Id,
+                    medico.Nome,
+                    medico.Email,
+                    Funcao = "Médico(a)"
+                });
+            }
+
+            foreach (var enfermeiro in enfermeiros)
+            {
+                retorno.Add(new
+                {
+                    enfermeiro.Id,
+                    enfermeiro.Nome,
+                    enfermeiro.Email,
+                    Funcao = "Enfermeiro(a)"
+                });
+            }
+
+            foreach (var agente in agentes)
+            {
+                retorno.Add(new
+                {
+                    agente.Id,
+                    agente.Nome,
+                    agente.Email,
+                    Funcao = "Agente Administrativo"
+                });
+            }
+
+            return retorno;
+        }
+
         public async Task Cadastrar(AgenteAdministrativo agente, Guid idClinica)
         {
             using var context = new ApiContext();

@@ -39,6 +39,23 @@ namespace WebApi.Controllers
             }
         }
 
+        [HttpPost("GetListaFuncionario")]
+        [Authorize(Roles = "administrador, agente")]
+        public async Task<IActionResult> GetListaFuncionario(Guid idClinica)
+        {
+            try
+            {
+                var AgenteAdmApp = new AgenteAdmApp();
+
+                return Ok(await AgenteAdmApp.GetListaFuncionario(idClinica));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+
+        }
+
         [HttpPost("Cadastrar")]
         [Authorize(Roles = "administrador, agente")]
         public async Task<IActionResult> Cadastrar(RequestCriarAgente request)
