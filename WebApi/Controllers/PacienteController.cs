@@ -39,25 +39,6 @@ namespace WebApi.Controllers
             }
         }
 
-        [HttpPost("VerificarToken")]
-        [AllowAnonymous]
-        public IActionResult VerificarToken(string token)
-        {
-            try
-            {
-                var valido = TokenService.ValidateToken(token);
-
-                if (valido)
-                    return Ok();
-                else
-                    return BadRequest("Token Invalido!");
-            }
-            catch (Exception e)
-            {
-                return BadRequest(e.Message);
-            }
-        }
-
         [HttpPost("Cadastrar")]
         [AllowAnonymous]
         public async Task<IActionResult> Cadastrar(RequestCriarPaciente request)
