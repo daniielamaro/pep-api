@@ -22,10 +22,6 @@ namespace Infraestrutura.Configurations
                 .Property(u => u.CRM)
                 .IsRequired();
 
-            builder
-                .Property(u => u.Senha)
-                .IsRequired();
-
             builder.HasOne(u => u.Clinica)
                 .WithMany()
                 .OnDelete(DeleteBehavior.SetNull);
