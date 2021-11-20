@@ -51,6 +51,62 @@ namespace Aplicacao
             await context.SaveChangesAsync();
         }
 
+        public async Task Update(Enfermeiro enfermeiro)
+        {
+            using var context = new ApiContext();
+
+            var oldEnfermeiro = await context.Enfermeiros.Where(x => x.Id == enfermeiro.Id).FirstOrDefaultAsync();
+
+            if (oldEnfermeiro == null) throw new Exception("Enfermeiro não encontrado!");
+
+            oldEnfermeiro.Nome = enfermeiro.Nome;
+            oldEnfermeiro.COREM = enfermeiro.COREM;
+            oldEnfermeiro.Email = enfermeiro.Email;
+            oldEnfermeiro.DataAtualizacao = DateTime.Now;
+
+            context.Enfermeiros.Update(oldEnfermeiro);
+            await context.SaveChangesAsync();
+        }
+
+        public async Task<Enfermeiro> ResetSenha(Guid id)
+        {
+            using var context = new ApiContext();
+
+            var enfermeiro = await context.Enfermeiros.Where(x => x.Id == id).FirstOrDefaultAsync();
+
+            if (enfermeiro == null) throw new Exception("Enfermeiro não encontrado!");
+
+            enfermeiro.Senha = new Random().Next(100000, 999999).ToString();
+
+            context.Enfermeiros.Update(enfermeiro);
+            await context.SaveChangesAsync();
+
+            return enfermeiro;
+        }
+
+        public async Task DeleteAgente(Guid id)
+        {
+            using var context = new ApiContext();
+
+            var enfermeiro = await context.Enfermeiros.Where(x => x.Id == id).FirstOrDefaultAsync();
+
+            if (enfermeiro == null) throw new Exception("Enfermeiro não encontrado!");
+
+            context.Enfermeiros.Remove(enfermeiro);
+            await context.SaveChangesAsync();
+        }
+
+        public async Task<Enfermeiro> GetEnfermeiroById(Guid id)
+        {
+            using var context = new ApiContext();
+
+            var enfermeiro = await context.Enfermeiros.Where(x => x.Id == id).FirstOrDefaultAsync();
+
+            if (enfermeiro == null) throw new Exception("Enfemeiro não localizado!");
+
+            return enfermeiro;
+        }
+
         public async Task<Enfermeiro> AlterarFotoPerfil(Guid Id, Arquivo Foto)
         {
             using var context = new ApiContext();
@@ -86,26 +142,6 @@ namespace Aplicacao
 
             return enfermeiro;
         }
-
-        /*public async Task<object> UpdateMedico(string email, string endereco, string senha, Guid id)
-        {
-            using var context = new ApiContext();
-
-            var pacienteOld = await context.Pacientes.AsNoTracking().Where(x => x.Id == id).SingleOrDefaultAsync();
-
-            pacienteOld.Email = email;
-            pacienteOld.Endereco = endereco;
-            pacienteOld.Senha = senha;
-            pacienteOld.DataAtualizacao = DateTime.Now;
-
-
-            context.Pacientes.Update(pacienteOld);
-
-            await context.SaveChangesAsync();
-
-            return pacienteOld;
-            
-        }*/
 
         public async Task DeletarFotoPerfil(Guid Id)
         {

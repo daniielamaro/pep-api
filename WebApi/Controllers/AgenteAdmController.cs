@@ -73,15 +73,93 @@ namespace WebApi.Controllers
 
                 var AgenteAdmApp = new AgenteAdmApp();
 
-                await AgenteAdmApp.Cadastrar(agente, request.IdClinica);
-
-                return Ok(agente);
+                return Ok(await AgenteAdmApp.Cadastrar(agente, request.IdClinica));
             }
             catch (Exception e)
             {
                 return BadRequest(e.Message);
             }
             
+        }
+
+        [HttpPost("Update")]
+        [Authorize(Roles = "administrador, agente")]
+        public async Task<IActionResult> Update(RequestUpdateAgente request)
+        {
+            try
+            {
+                var agente = new AgenteAdministrativo
+                {
+                    Id = request.Id,
+                    Nome = request.Nome,
+                    CPF = request.CPF,
+                    Email = request.Email
+                };
+
+                var AgenteAdmApp = new AgenteAdmApp();
+
+                await AgenteAdmApp.Update(agente);
+
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+
+        }
+
+        [HttpPost("ResetSenha")]
+        [Authorize(Roles = "administrador, agente")]
+        public async Task<IActionResult> ResetSenha(Guid id)
+        {
+            try
+            {
+                var AgenteAdmApp = new AgenteAdmApp();
+
+                return Ok(await AgenteAdmApp.ResetSenha(id));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+
+        }
+
+        [HttpDelete("DeleteAgente")]
+        [Authorize(Roles = "administrador, agente")]
+        public async Task<IActionResult> DeleteAgente(Guid id)
+        {
+            try
+            {
+                var AgenteAdmApp = new AgenteAdmApp();
+
+                await AgenteAdmApp.DeleteAgente(id);
+
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+
+        }
+
+        [HttpPost("GetAgenteById")]
+        [Authorize(Roles = "administrador, agente")]
+        public async Task<IActionResult> GetAgenteById(Guid id)
+        {
+            try
+            {
+                var agenteAdmApp = new AgenteAdmApp();
+
+                return Ok(await agenteAdmApp.GetAgenteById(id));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+
         }
 
         [HttpPost("AlterarFotoPerfil")]

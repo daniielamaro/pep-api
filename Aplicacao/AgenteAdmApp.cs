@@ -58,7 +58,7 @@ namespace Aplicacao
                     medico.Id,
                     medico.Nome,
                     medico.Email,
-                    Funcao = "Médico(a)"
+                    Funcao = "medico"
                 });
             }
 
@@ -69,7 +69,7 @@ namespace Aplicacao
                     enfermeiro.Id,
                     enfermeiro.Nome,
                     enfermeiro.Email,
-                    Funcao = "Enfermeiro(a)"
+                    Funcao = "enfermeiro"
                 });
             }
 
@@ -80,14 +80,14 @@ namespace Aplicacao
                     agente.Id,
                     agente.Nome,
                     agente.Email,
-                    Funcao = "Agente Administrativo"
+                    Funcao = "agente"
                 });
             }
 
             return retorno;
         }
 
-        public async Task Cadastrar(AgenteAdministrativo agente, Guid idClinica)
+        public async Task<AgenteAdministrativo> Cadastrar(AgenteAdministrativo agente, Guid idClinica)
         {
             using var context = new ApiContext();
 
@@ -95,6 +95,64 @@ namespace Aplicacao
 
             await context.AgentesAdministrativos.AddAsync(agente);
             await context.SaveChangesAsync();
+
+            return agente;
+        }
+
+        public async Task Update(AgenteAdministrativo agente)
+        {
+            using var context = new ApiContext();
+
+            var oldAgente = await context.AgentesAdministrativos.Where(x => x.Id == agente.Id).FirstOrDefaultAsync();
+
+            if (oldAgente == null) throw new Exception("Agente administrativo não encontrado!");
+
+            oldAgente.Nome = agente.Nome;
+            oldAgente.CPF = agente.CPF;
+            oldAgente.Email = agente.Email;
+            oldAgente.DataAtualizacao = DateTime.Now;
+
+            context.AgentesAdministrativos.Update(oldAgente);
+            await context.SaveChangesAsync();
+        }
+
+        public async Task<AgenteAdministrativo> ResetSenha(Guid id)
+        {
+            using var context = new ApiContext();
+
+            var oldAgente = await context.AgentesAdministrativos.Where(x => x.Id == id).FirstOrDefaultAsync();
+
+            if (oldAgente == null) throw new Exception("Agente administrativo não encontrado!");
+
+            oldAgente.Senha = new Random().Next(100000, 999999).ToString();
+
+            context.AgentesAdministrativos.Update(oldAgente);
+            await context.SaveChangesAsync();
+
+            return oldAgente;
+        }
+
+        public async Task DeleteAgente(Guid id)
+        {
+            using var context = new ApiContext();
+
+            var oldAgente = await context.AgentesAdministrativos.Where(x => x.Id == id).FirstOrDefaultAsync();
+
+            if (oldAgente == null) throw new Exception("Agente administrativo não encontrado!");
+
+            context.AgentesAdministrativos.Remove(oldAgente);
+            await context.SaveChangesAsync();
+        }
+
+        public async Task<AgenteAdministrativo> GetAgenteById(Guid id)
+        {
+            using var context = new ApiContext();
+
+            var agente = await context.AgentesAdministrativos.Where(x => x.Id == id).FirstOrDefaultAsync();
+
+            if (agente == null) throw new Exception("Agente administrativo não localizado!");
+
+            return agente;
         }
 
         public async Task<AgenteAdministrativo> AlterarFotoPerfil(Guid Id, Arquivo Foto)
@@ -132,26 +190,6 @@ namespace Aplicacao
 
             return agente;
         }
-
-        /*public async Task<object> UpdateMedico(string email, string endereco, string senha, Guid id)
-        {
-            using var context = new ApiContext();
-
-            var pacienteOld = await context.Pacientes.AsNoTracking().Where(x => x.Id == id).SingleOrDefaultAsync();
-
-            pacienteOld.Email = email;
-            pacienteOld.Endereco = endereco;
-            pacienteOld.Senha = senha;
-            pacienteOld.DataAtualizacao = DateTime.Now;
-
-
-            context.Pacientes.Update(pacienteOld);
-
-            await context.SaveChangesAsync();
-
-            return pacienteOld;
-            
-        }*/
 
         public async Task DeletarFotoPerfil(Guid Id)
         {

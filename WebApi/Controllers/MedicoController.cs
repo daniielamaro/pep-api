@@ -67,6 +67,86 @@ namespace WebApi.Controllers
             
         }
 
+        [HttpPost("Update")]
+        [Authorize(Roles = "administrador, agente")]
+        public async Task<IActionResult> Update(RequestUpdateMedico request)
+        {
+            try
+            {
+                var medico = new Medico
+                {
+                    Id = request.Id,
+                    Nome = request.Nome,
+                    CRM = request.CRM,
+                    Email = request.Email
+                };
+
+                var medicoApp = new MedicoApp();
+
+                await medicoApp.Update(medico);
+
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+
+        }
+
+        [HttpPost("ResetSenha")]
+        [Authorize(Roles = "administrador, agente")]
+        public async Task<IActionResult> ResetSenha(Guid id)
+        {
+            try
+            {
+                var medicoApp = new MedicoApp();
+
+                return Ok(await medicoApp.ResetSenha(id));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+
+        }
+
+        [HttpDelete("DeleteAgente")]
+        [Authorize(Roles = "administrador, agente")]
+        public async Task<IActionResult> DeleteAgente(Guid id)
+        {
+            try
+            {
+                var medicoApp = new MedicoApp();
+
+                await medicoApp.DeleteAgente(id);
+
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+
+        }
+
+        [HttpPost("GetMedicoById")]
+        [Authorize(Roles = "administrador, agente")]
+        public async Task<IActionResult> GetMedicoById(Guid id)
+        {
+            try
+            {
+                var medicoApp = new MedicoApp();
+
+                return Ok(await medicoApp.GetMedicoById(id));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+
+        }
+
         [HttpPost("AlterarFotoPerfil")]
         [Authorize(Roles = "paciente")]
         public async Task<IActionResult> AlterarFotoPerfil(RequestSetFotoPerfil request)

@@ -67,6 +67,86 @@ namespace WebApi.Controllers
             
         }
 
+        [HttpPost("Update")]
+        [Authorize(Roles = "administrador, agente")]
+        public async Task<IActionResult> Update(RequestUpdateEnfermeiro request)
+        {
+            try
+            {
+                var enfermeiro = new Enfermeiro
+                {
+                    Id = request.Id,
+                    Nome = request.Nome,
+                    COREM = request.COREM,
+                    Email = request.Email
+                };
+
+                var enfermeiroApp = new EnfermeiroApp();
+
+                await enfermeiroApp.Update(enfermeiro);
+
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+
+        }
+
+        [HttpPost("ResetSenha")]
+        [Authorize(Roles = "administrador, agente")]
+        public async Task<IActionResult> ResetSenha(Guid id)
+        {
+            try
+            {
+                var enfermeiroApp = new EnfermeiroApp();
+
+                return Ok(await enfermeiroApp.ResetSenha(id));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+
+        }
+
+        [HttpDelete("DeleteAgente")]
+        [Authorize(Roles = "administrador, agente")]
+        public async Task<IActionResult> DeleteAgente(Guid id)
+        {
+            try
+            {
+                var enfermeiroApp = new EnfermeiroApp();
+
+                await enfermeiroApp.DeleteAgente(id);
+
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+
+        }
+
+        [HttpPost("GetEnfermeiroById")]
+        [Authorize(Roles = "administrador, agente")]
+        public async Task<IActionResult> GetEnfermeiroById(Guid id)
+        {
+            try
+            {
+                var enfermeiroApp = new EnfermeiroApp();
+
+                return Ok(await enfermeiroApp.GetEnfermeiroById(id));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+
+        }
+
         [HttpPost("AlterarFotoPerfil")]
         [Authorize(Roles = "enfermeiro")]
         public async Task<IActionResult> AlterarFotoPerfil(RequestSetFotoPerfil request)
