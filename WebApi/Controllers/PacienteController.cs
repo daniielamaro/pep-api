@@ -38,6 +38,25 @@ namespace WebApi.Controllers
                 return BadRequest(e.Message);
             }
         }
+        [HttpPost("GetAllPaciente")]
+        [Authorize(Roles = "medico,enfermeiro")]
+        public async Task<IActionResult> GetAllPaciente()
+        {
+            try
+            {
+                var pacienteApp = new PacienteApp();
+
+                var paciente = await pacienteApp.GetAllPacientes();
+
+                return Ok(paciente);
+
+            }
+            catch (Exception e)
+            {
+
+                return BadRequest(e.Message);
+            }
+        }
 
         [HttpPost("Cadastrar")]
         [AllowAnonymous]

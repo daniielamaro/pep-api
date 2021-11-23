@@ -94,6 +94,15 @@ namespace Aplicacao
             
         }
 
+        public async Task<object> GetAllPacientes()
+        {
+            using var context = new ApiContext();
+
+            var paciente = await context.Pacientes.AsNoTracking().ToListAsync();
+
+            return paciente;
+        }
+
         public async Task DeletarFotoPerfil(Guid Id)
         {
             using var context = new ApiContext();
