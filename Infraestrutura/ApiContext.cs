@@ -22,7 +22,7 @@ namespace Infraestrutura
         public DbSet<Medicamento> Medicamentos { get; set; }
         public DbSet<ConsultaTipo> TiposConsultas { get; set; }
 
-        private readonly string ConectionString = "Server=35.184.198.60;Port=5432;Database=postgres;User Id=unisuam;Password=@Unisuam1234;";
+        private readonly string ConectionString = "Server=35.188.193.179;Port=5432;Database=postgres;User Id=unisuam;Password=@Unisuam123;";
 
         public ApiContext(DbContextOptions<ApiContext> options) : base(options) { }
         public ApiContext() { }

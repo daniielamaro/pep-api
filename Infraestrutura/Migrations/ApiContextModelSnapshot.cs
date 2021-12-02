@@ -440,7 +440,6 @@ namespace Infraestrutura.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Senha")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
