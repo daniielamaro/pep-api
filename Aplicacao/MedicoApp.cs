@@ -107,6 +107,33 @@ namespace Aplicacao
             return medico;
         }
 
+        public async Task<List<object>> GetHistoricoAtendimento(Guid id)
+        {
+            using var context = new ApiContext();
+
+            var medico = await context.Medicos.AsNoTracking().Include(x => x.Consultas).Where(x => x.Id == id).FirstOrDefaultAsync();
+
+            if (medico == null) throw new Exception("Medico não localizado!");
+
+            List<object> response = new List<object>();
+
+            foreach (var consulta in medico.Consultas)
+            {
+                var paciente = await context.Pacientes.AsNoTracking().Where(x => x.Consultas.Contains(consulta)).FirstOrDefaultAsync();
+
+                if(paciente != null)
+                {
+                    response.Add(new
+                    {
+                        paciente,
+                        consulta
+                    });
+                }
+            }
+
+            return response;
+        }
+
         public async Task<Medico> AlterarFotoPerfil(Guid Id, Arquivo Foto)
         {
             using var context = new ApiContext();

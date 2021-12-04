@@ -147,8 +147,27 @@ namespace WebApi.Controllers
 
         }
 
+        [HttpPost("GetHistoricoAtendimento")]
+        [Authorize(Roles = "medico")]
+        public async Task<IActionResult> GetHistoricoAtendimento()
+        {
+            var id = User.FindFirst(ClaimTypes.Sid)?.Value;
+
+            try
+            {
+                var medicoApp = new MedicoApp();
+
+                return Ok(await medicoApp.GetHistoricoAtendimento(Guid.Parse(id)));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+
+        }
+
         [HttpPost("AlterarFotoPerfil")]
-        [Authorize(Roles = "paciente")]
+        [Authorize(Roles = "medico")]
         public async Task<IActionResult> AlterarFotoPerfil(RequestSetFotoPerfil request)
         {
             var idPacienteToken = User.FindFirst(ClaimTypes.Sid)?.Value;
@@ -181,7 +200,7 @@ namespace WebApi.Controllers
         }
 
         [HttpDelete("DeletarFotoPerfil")]
-        [Authorize(Roles = "paciente")]
+        [Authorize(Roles = "medico")]
         public async Task<IActionResult> DeletarFotoPerfil(Guid id)
         {
             var idPacienteToken = User.FindFirst(ClaimTypes.Sid)?.Value;
