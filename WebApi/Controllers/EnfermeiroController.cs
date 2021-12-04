@@ -147,6 +147,44 @@ namespace WebApi.Controllers
 
         }
 
+        [HttpPost("GetHistoricoAtendimento")]
+        [Authorize(Roles = "enfermeiro")]
+        public async Task<IActionResult> GetHistoricoAtendimento()
+        {
+            var id = User.FindFirst(ClaimTypes.Sid)?.Value;
+
+            try
+            {
+                var enfermeiroApp = new EnfermeiroApp();
+
+                return Ok(await enfermeiroApp.GetHistoricoAtendimento(Guid.Parse(id)));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+
+        }
+
+        [HttpPost("GetHistoricoPrescricoes")]
+        [Authorize(Roles = "enfermeiro")]
+        public async Task<IActionResult> GetHistoricoPrescricoes()
+        {
+            var id = User.FindFirst(ClaimTypes.Sid)?.Value;
+
+            try
+            {
+                var enfermeiroApp = new EnfermeiroApp();
+
+                return Ok(await enfermeiroApp.GetHistoricoPrescricoes(Guid.Parse(id)));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+
+        }
+
         [HttpPost("AlterarFotoPerfil")]
         [Authorize(Roles = "enfermeiro")]
         public async Task<IActionResult> AlterarFotoPerfil(RequestSetFotoPerfil request)

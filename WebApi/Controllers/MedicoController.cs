@@ -166,6 +166,25 @@ namespace WebApi.Controllers
 
         }
 
+        [HttpPost("GetHistoricoPrescricoes")]
+        [Authorize(Roles = "medico")]
+        public async Task<IActionResult> GetHistoricoPrescricoes()
+        {
+            var id = User.FindFirst(ClaimTypes.Sid)?.Value;
+
+            try
+            {
+                var medicoApp = new MedicoApp();
+
+                return Ok(await medicoApp.GetHistoricoPrescricoes(Guid.Parse(id)));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+
+        }
+
         [HttpPost("AlterarFotoPerfil")]
         [Authorize(Roles = "medico")]
         public async Task<IActionResult> AlterarFotoPerfil(RequestSetFotoPerfil request)
