@@ -48,7 +48,6 @@ namespace WebApi.Controllers
             }
         }
 
-
         [HttpPost("ListaConsulta")]
         [Authorize(Roles = "paciente,medico,enfermeiro")]
         public async Task<IActionResult> ListaConsulta(Guid idPaciente)

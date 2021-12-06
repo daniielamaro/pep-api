@@ -38,6 +38,7 @@ namespace WebApi.Controllers
                 return BadRequest(e.Message);
             }
         }
+
         [HttpPost("GetAllPaciente")]
         [Authorize(Roles = "medico,enfermeiro")]
         public async Task<IActionResult> GetAllPaciente()
@@ -54,6 +55,38 @@ namespace WebApi.Controllers
             catch (Exception e)
             {
 
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPost("GetPacienteById")]
+        [Authorize(Roles = "medico,enfermeiro")]
+        public async Task<IActionResult> GetPacienteById(Guid id)
+        {
+            try
+            {
+                var pacienteApp = new PacienteApp();
+
+                return Ok(await pacienteApp.GetPacienteById(id));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPost("GetPacienteByFilter")]
+        [Authorize(Roles = "medico,enfermeiro")]
+        public async Task<IActionResult> GetPacienteByFilter(RequestGetPaciente request)
+        {
+            try
+            {
+                var pacienteApp = new PacienteApp();
+
+                return Ok(await pacienteApp.GetPacienteByFilter(request.Nome, request.CPF, request.DataNasc));
+            }
+            catch (Exception e)
+            {
                 return BadRequest(e.Message);
             }
         }

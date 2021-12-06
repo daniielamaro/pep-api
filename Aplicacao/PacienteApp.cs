@@ -103,6 +103,37 @@ namespace Aplicacao
             return paciente;
         }
 
+        public async Task<object> GetPacienteById(Guid id)
+        {
+            using var context = new ApiContext();
+
+            var paciente = await context.Pacientes.AsNoTracking().Include(x => x.FotoPerfil).Where(x => x.Id == id).FirstOrDefaultAsync();
+
+            return new
+            {
+                paciente.Id,
+                paciente.FotoPerfil,
+                paciente.Nome,
+                paciente.Cpf,
+                Idade = DateTime.Now >= paciente.DataNasc ? (DateTime.Now.Year - paciente.DataNasc.Year) : (DateTime.Now.Year - paciente.DataNasc.Year) -1
+            };
+        }
+
+        public async Task<object> GetPacienteByFilter(string nome, string cpf, string dataNasc)
+        {
+            using var context = new ApiContext();
+
+            var paciente = await context.Pacientes
+                .AsNoTracking()
+                .Include(x => x.FotoPerfil)
+                .Where(x => (!string.IsNullOrWhiteSpace(nome) ? x.Nome.ToUpper().Contains(nome.ToUpper()) : true) &&
+                            (!string.IsNullOrWhiteSpace(cpf) ? x.Cpf.Replace(".","").Replace("-","") == cpf.Replace(".", "").Replace("-", "") : true) &&
+                            (!string.IsNullOrWhiteSpace(dataNasc) ? x.DataNasc.Date == DateTime.Parse(dataNasc).Date : true))
+                .ToListAsync();
+
+            return paciente.Select(x => new { x.Id, x.Nome, x.FotoPerfil, x.Cpf }).ToList();
+        }
+
         public async Task DeletarFotoPerfil(Guid Id)
         {
             using var context = new ApiContext();
