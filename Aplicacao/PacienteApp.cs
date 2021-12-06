@@ -107,7 +107,20 @@ namespace Aplicacao
         {
             using var context = new ApiContext();
 
-            var paciente = await context.Pacientes.AsNoTracking().Include(x => x.FotoPerfil).Where(x => x.Id == id).FirstOrDefaultAsync();
+            var paciente = await context.Pacientes.AsNoTracking()
+                .Include(x => x.FotoPerfil)
+                .Include(x => x.Medicamentos)
+                .Where(x => x.Id == id).FirstOrDefaultAsync();
+
+            List<Medicamento> result = new List<Medicamento>();
+
+            foreach (var med in paciente.Medicamentos)
+            {
+                if(med.DataTermino == null || med.DataTermino > DateTime.Now || med.UsoContinuo)
+                {
+                    result.Add(med);
+                }
+            }
 
             return new
             {
@@ -115,6 +128,7 @@ namespace Aplicacao
                 paciente.FotoPerfil,
                 paciente.Nome,
                 paciente.Endereco,
+                Medicamentos = result,
                 paciente.Rg,
                 paciente.Cpf,
                 Idade = DateTime.Now >= paciente.DataNasc ? (DateTime.Now.Year - paciente.DataNasc.Year) : (DateTime.Now.Year - paciente.DataNasc.Year) -1
