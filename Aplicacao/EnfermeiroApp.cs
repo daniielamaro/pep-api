@@ -21,12 +21,14 @@ namespace Aplicacao
                 enfermeiro = await context.Enfermeiros
                     .Include(x => x.FotoPerfil)
                     .Include(x => x.Clinica)
+                        .ThenInclude(x => x.Endereco)
                     .Where(x => x.Email.ToLower() == usuario.ToLower())
                     .FirstOrDefaultAsync();
             else
                 enfermeiro = await context.Enfermeiros
                     .Include(x => x.FotoPerfil)
                     .Include(x => x.Clinica)
+                        .ThenInclude(x => x.Endereco)
                     .Where(x => x.COREM.Trim().ToLower().Replace(".", "").Replace("-", "") == usuario.Trim().ToLower().Replace(".", "").Replace("-", ""))
                     .FirstOrDefaultAsync();
 
@@ -77,6 +79,25 @@ namespace Aplicacao
             if (enfermeiro == null) throw new Exception("Enfermeiro não encontrado!");
 
             enfermeiro.Senha = new Random().Next(100000, 999999).ToString();
+
+            context.Enfermeiros.Update(enfermeiro);
+            await context.SaveChangesAsync();
+
+            return enfermeiro;
+        }
+
+        public async Task<Enfermeiro> TrocarSenha(Guid id, string senhaAtual, string novaSenha)
+        {
+            using var context = new ApiContext();
+
+            var enfermeiro = await context.Enfermeiros.Where(x => x.Id == id).FirstOrDefaultAsync();
+
+            if (enfermeiro == null) throw new Exception("Enfermeiro(a) não encontrado!");
+
+            if (enfermeiro.Senha != senhaAtual) throw new Exception("Senha incorreta!");
+
+            enfermeiro.Senha = novaSenha;
+            enfermeiro.DataAtualizacao = DateTime.Now;
 
             context.Enfermeiros.Update(enfermeiro);
             await context.SaveChangesAsync();

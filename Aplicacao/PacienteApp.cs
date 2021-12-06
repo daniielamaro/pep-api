@@ -114,6 +114,8 @@ namespace Aplicacao
                 paciente.Id,
                 paciente.FotoPerfil,
                 paciente.Nome,
+                paciente.Endereco,
+                paciente.Rg,
                 paciente.Cpf,
                 Idade = DateTime.Now >= paciente.DataNasc ? (DateTime.Now.Year - paciente.DataNasc.Year) : (DateTime.Now.Year - paciente.DataNasc.Year) -1
             };

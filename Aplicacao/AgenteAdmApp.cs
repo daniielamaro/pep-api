@@ -21,12 +21,14 @@ namespace Aplicacao
                 agente = await context.AgentesAdministrativos
                     .Include(x => x.FotoPerfil)
                     .Include(x => x.Clinica)
+                        .ThenInclude(x => x.Endereco)
                     .Where(x => x.Email.ToLower() == usuario.ToLower())
                     .FirstOrDefaultAsync();
             else
                 agente = await context.AgentesAdministrativos
                     .Include(x => x.FotoPerfil)
                     .Include(x => x.Clinica)
+                        .ThenInclude(x => x.Endereco)
                     .Where(x => x.CPF.Trim().ToLower().Replace(".", "").Replace("-", "") == usuario.Trim().ToLower().Replace(".", "").Replace("-", ""))
                     .FirstOrDefaultAsync();
 
@@ -130,6 +132,25 @@ namespace Aplicacao
             await context.SaveChangesAsync();
 
             return oldAgente;
+        }
+
+        public async Task<AgenteAdministrativo> TrocarSenha(Guid id, string senhaAtual, string novaSenha)
+        {
+            using var context = new ApiContext();
+
+            var agente = await context.AgentesAdministrativos.Where(x => x.Id == id).FirstOrDefaultAsync();
+
+            if (agente == null) throw new Exception("Agente administrativo não encontrado!");
+
+            if (agente.Senha != senhaAtual) throw new Exception("Senha incorreta!");
+
+            agente.Senha = novaSenha;
+            agente.DataAtualizacao = DateTime.Now;
+
+            context.AgentesAdministrativos.Update(agente);
+            await context.SaveChangesAsync();
+
+            return agente;
         }
 
         public async Task DeleteAgente(Guid id)

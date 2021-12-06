@@ -21,12 +21,14 @@ namespace Aplicacao
                 medico = await context.Medicos
                     .Include(x => x.FotoPerfil)
                     .Include(x => x.Clinica)
+                        .ThenInclude(x => x.Endereco)
                     .Where(x => x.Email.ToLower() == usuario.ToLower())
                     .FirstOrDefaultAsync();
             else
                 medico = await context.Medicos
                     .Include(x => x.FotoPerfil)
                     .Include(x => x.Clinica)
+                        .ThenInclude(x => x.Endereco)
                     .Where(x => x.CRM.Trim().ToLower().Replace(".", "").Replace("-", "") == usuario.Trim().ToLower().Replace(".", "").Replace("-", ""))
                     .FirstOrDefaultAsync();
 
@@ -77,6 +79,25 @@ namespace Aplicacao
             if (medico == null) throw new Exception("Medico não encontrado!");
 
             medico.Senha = new Random().Next(100000, 999999).ToString();
+
+            context.Medicos.Update(medico);
+            await context.SaveChangesAsync();
+
+            return medico;
+        }
+
+        public async Task<Medico> TrocarSenha(Guid id, string senhaAtual, string novaSenha)
+        {
+            using var context = new ApiContext();
+
+            var medico = await context.Medicos.Where(x => x.Id == id).FirstOrDefaultAsync();
+
+            if (medico == null) throw new Exception("Medico(a) não encontrado!");
+
+            if(medico.Senha != senhaAtual) throw new Exception("Senha incorreta!");
+
+            medico.Senha = novaSenha;
+            medico.DataAtualizacao = DateTime.Now;
 
             context.Medicos.Update(medico);
             await context.SaveChangesAsync();

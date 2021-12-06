@@ -126,6 +126,28 @@ namespace WebApi.Controllers
 
         }
 
+        [HttpPost("TrocarSenha")]
+        [Authorize(Roles = "agente")]
+        public async Task<IActionResult> TrocarSenha(Guid id, string senhaAtual, string novaSenha)
+        {
+            var idToken = User.FindFirst(ClaimTypes.Sid)?.Value;
+
+            if (id != Guid.Parse(idToken))
+                return BadRequest("Você não tem permissão de alterar a senha de outro agente!");
+
+            try
+            {
+                var agenteApp = new AgenteAdmApp();
+
+                return Ok(await agenteApp.TrocarSenha(id, senhaAtual, novaSenha));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+
+        }
+
         [HttpDelete("DeleteAgente")]
         [Authorize(Roles = "administrador, agente")]
         public async Task<IActionResult> DeleteAgente(Guid id)
