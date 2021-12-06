@@ -105,7 +105,7 @@ namespace Aplicacao
             return enfermeiro;
         }
 
-        public async Task DeleteAgente(Guid id)
+        public async Task DeleteEnfermeiro(Guid id)
         {
             using var context = new ApiContext();
 

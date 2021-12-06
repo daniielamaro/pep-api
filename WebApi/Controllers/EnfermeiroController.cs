@@ -133,15 +133,15 @@ namespace WebApi.Controllers
 
         }
 
-        [HttpDelete("DeleteAgente")]
+        [HttpDelete("DeleteEnfermeiro")]
         [Authorize(Roles = "administrador, agente")]
-        public async Task<IActionResult> DeleteAgente(Guid id)
+        public async Task<IActionResult> DeleteEnfermeiro(Guid id)
         {
             try
             {
                 var enfermeiroApp = new EnfermeiroApp();
 
-                await enfermeiroApp.DeleteAgente(id);
+                await enfermeiroApp.DeleteEnfermeiro(id);
 
                 return Ok();
             }

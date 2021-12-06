@@ -105,7 +105,7 @@ namespace Aplicacao
             return medico;
         }
 
-        public async Task DeleteAgente(Guid id)
+        public async Task DeleteMedico(Guid id)
         {
             using var context = new ApiContext();
 
