@@ -32,11 +32,11 @@ namespace Infraestrutura.Configurations
 
             builder.HasMany(u => u.Medicamentos)
                 .WithOne()
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.SetNull);
 
             builder.HasMany(u => u.Consultas)
                 .WithOne()
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }
