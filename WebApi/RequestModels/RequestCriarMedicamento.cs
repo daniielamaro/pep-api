@@ -8,7 +8,7 @@ namespace WebApi.RequestModels
 {
     public class RequestCriarMedicamento
     {
-        public Guid IdPaciente { get; set; }
+        public Guid? IdPaciente { get; set; }
         public string Nome { get; set; }
         public int NumQuantidade { get; set; }
         public string TipoQuantidade { get; set; }

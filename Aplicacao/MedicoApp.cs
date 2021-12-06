@@ -111,7 +111,10 @@ namespace Aplicacao
         {
             using var context = new ApiContext();
 
-            var medico = await context.Medicos.AsNoTracking().Include(x => x.Consultas).Where(x => x.Id == id).FirstOrDefaultAsync();
+            var medico = await context.Medicos.AsNoTracking()
+                .Include(x => x.Consultas)
+                    .ThenInclude(x => x.Tipo)
+                .Where(x => x.Id == id).FirstOrDefaultAsync();
 
             if (medico == null) throw new Exception("Medico não localizado!");
 

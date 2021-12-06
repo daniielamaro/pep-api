@@ -19,10 +19,10 @@ namespace WebApi.Controllers
         [Authorize(Roles = "paciente,medico,enfermeiro")]
         public async Task<IActionResult> CadastroConsulta(RequestCriarConsulta request)
         {
-            var idPacienteToken = User.FindFirst(ClaimTypes.Sid)?.Value;
+            var id = User.FindFirst(ClaimTypes.Sid)?.Value;
             var role = User.FindFirst(ClaimTypes.Role)?.Value;
 
-            if (request.IdPaciente != Guid.Parse(idPacienteToken) && role == "paciente")
+            if (request.IdPaciente != Guid.Parse(id) && role == "paciente")
                 return BadRequest("Você não tem permissão de cadastrar consultas de outro usuario!");
 
             try
@@ -38,7 +38,7 @@ namespace WebApi.Controllers
 
                 var consultaApp = new ConsultaApp();
 
-                await consultaApp.CadastroConsulta(newConsulta, request.IdPaciente, request.IdTipoConsulta);
+                await consultaApp.CadastroConsulta(newConsulta, request.IdPaciente, request.IdTipoConsulta, Guid.Parse(id), role);
 
                 return Ok();
             }

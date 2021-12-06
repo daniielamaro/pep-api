@@ -100,7 +100,10 @@ namespace Aplicacao
         {
             using var context = new ApiContext();
 
-            var enfermeiro = await context.Enfermeiros.AsNoTracking().Include(x => x.Consultas).Where(x => x.Id == id).FirstOrDefaultAsync();
+            var enfermeiro = await context.Enfermeiros.AsNoTracking()
+                .Include(x => x.Consultas)
+                    .ThenInclude(x => x.Tipo)
+                .Where(x => x.Id == id).FirstOrDefaultAsync();
 
             if (enfermeiro == null) throw new Exception("Enfermeiro não localizado!");
 

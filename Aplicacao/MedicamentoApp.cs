@@ -33,6 +33,54 @@ namespace Aplicacao
             await context.SaveChangesAsync();
         }
 
+        public async Task CadastrarLista(List<Medicamento> medicamentos, Guid idPaciente, Guid idFuncionario, string role)
+        {
+            using var context = new ApiContext();
+
+            var paciente = await context.Pacientes
+                .Include(x => x.Medicamentos)
+                .Where(x => x.Id == idPaciente).FirstOrDefaultAsync();
+
+            if(role == "medico")
+            {
+                var medico = await context.Medicos
+                    .Include(x => x.Medicamentos)
+                    .Where(x => x.Id == idFuncionario).FirstOrDefaultAsync();
+
+                if (medico.Medicamentos == null)
+                    medico.Medicamentos = new List<Medicamento>();
+
+                medico.Medicamentos.AddRange(medicamentos);
+
+                context.Medicos.Update(medico);
+            }
+            else
+            {
+                var enfermeiro = await context.Enfermeiros
+                    .Include(x => x.Medicamentos)
+                    .Where(x => x.Id == idFuncionario).FirstOrDefaultAsync();
+
+                if (enfermeiro.Medicamentos == null)
+                    enfermeiro.Medicamentos = new List<Medicamento>();
+
+                enfermeiro.Medicamentos.AddRange(medicamentos);
+
+                context.Enfermeiros.Update(enfermeiro);
+            }
+            
+            if (paciente == null)
+                throw new Exception("Paciente não encontrado!");
+
+            if (paciente.Medicamentos == null)
+                paciente.Medicamentos = new List<Medicamento>();
+
+            paciente.Medicamentos.AddRange(medicamentos);
+
+            context.Pacientes.Update(paciente);
+
+            await context.SaveChangesAsync();
+        }
+
         public async Task<List<Medicamento>> ConsultarListaMedicamento(Guid idPaciente)
         {
             using var context = new ApiContext();

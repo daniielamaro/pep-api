@@ -11,7 +11,7 @@ namespace Aplicacao
 {
     public class ConsultaApp
     {
-        public async Task CadastroConsulta( Consulta consultas, Guid idPaciente, Guid idTipoConsulta)
+        public async Task CadastroConsulta( Consulta consultas, Guid idPaciente, Guid idTipoConsulta, Guid idFuncionario, string role)
         {
             using var context = new ApiContext();
 
@@ -25,6 +25,33 @@ namespace Aplicacao
                 throw new Exception("Tipo de Consulta não encontrado");
 
             consultas.Tipo = tipoConsulta;
+
+            if (role == "medico")
+            {
+                var medico = await context.Medicos
+                    .Include(x => x.Consultas)
+                    .Where(x => x.Id == idFuncionario).FirstOrDefaultAsync();
+
+                if (medico.Consultas == null)
+                    medico.Consultas = new List<Consulta>();
+
+                medico.Consultas.Add(consultas);
+
+                context.Medicos.Update(medico);
+            }
+            else if(role == "enfermeiro")
+            {
+                var enfermeiro = await context.Enfermeiros
+                    .Include(x => x.Consultas)
+                    .Where(x => x.Id == idFuncionario).FirstOrDefaultAsync();
+
+                if (enfermeiro.Consultas == null)
+                    enfermeiro.Consultas = new List<Consulta>();
+
+                enfermeiro.Consultas.Add(consultas);
+
+                context.Enfermeiros.Update(enfermeiro);
+            }
 
             if (paciente.Consultas == null)
                 paciente.Consultas = new List<Consulta>();

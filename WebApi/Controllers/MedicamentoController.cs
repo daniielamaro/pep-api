@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using WebApi.RequestModels;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using System.Collections.Generic;
 
 namespace WebApi.Controllers
 {
@@ -14,7 +15,7 @@ namespace WebApi.Controllers
     public class MedicamentoController : ControllerBase
     {
         [HttpPost("Cadastro")]
-        [Authorize(Roles = "paciente,medico,enfermeiro")]
+        [Authorize(Roles = "paciente")]
         public async Task<IActionResult> Cadastro(RequestCriarMedicamento request)
         {
             var idPacienteToken = User.FindFirst(ClaimTypes.Sid)?.Value;
@@ -59,7 +60,55 @@ namespace WebApi.Controllers
 
                 var servico = new MedicamentoApp();
 
-                await servico.Cadastrar(newMedicamento, request.IdPaciente);
+                await servico.Cadastrar(newMedicamento, (Guid)request.IdPaciente);
+
+                return Ok();
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPost("CadastroLista")]
+        [Authorize(Roles = "medico,enfermeiro")]
+        public async Task<IActionResult> CadastroLista(RequestCriarListaMedicamento request)
+        {
+            var idFuncionario = User.FindFirst(ClaimTypes.Sid)?.Value;
+            var roleFuncionario = User.FindFirst(ClaimTypes.Role)?.Value;
+
+            try
+            {
+                List<Medicamento> medicamentos = new List<Medicamento>();
+
+                foreach (var medicamento in request.Medicamentos)
+                {
+                    var newMedicamento = new Medicamento
+                    {
+                        Nome = medicamento.Nome,
+                        NumQuantidade = medicamento.NumQuantidade,
+                        TipoQuantidade = medicamento.TipoQuantidade,
+                        OutraQuantidade = medicamento.OutraQuantidade,
+                        NumIntervalo = medicamento.NumIntervalo,
+                        TipoIntervalo = medicamento.TipoIntervalo,
+                        OutroIntervalo = medicamento.OutroIntervalo,
+                        Publico = true,
+                        TipoCadastro = 1,
+                        Receita = null,
+                        DataInicio = DateTime.Parse(medicamento.DataInicio),
+                        UsoContinuo = medicamento.UsoContinuo,
+                        DataCriacao = DateTime.Now
+                    };
+
+                    if (!medicamento.UsoContinuo)
+                        newMedicamento.DataTermino = DateTime.Parse(medicamento.DataTermino);
+
+                    medicamentos.Add(newMedicamento);
+                }
+
+                var servico = new MedicamentoApp();
+
+                await servico.CadastrarLista(medicamentos, request.IdPaciente, Guid.Parse(idFuncionario), roleFuncionario);
 
                 return Ok();
             }
